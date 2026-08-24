@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kwame OS 95 - Virtual Desktop & Portfolio</title>
+  <meta name="description" content="A nostalgic Windows 95 / Sci-Fi Virtual Desktop OS Simulator showcasing the engineering portfolio of Kwame Afriyie Ampomah (Mayer)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="desktop.css" />
+</head>
+<body class="theme-win95">
+
+  <!-- CRT Scanlines & Screen Glass Effect -->
+  <div class="crt-overlay" id="crt-overlay"></div>
+  <div class="crt-vignette"></div>
+
+  <!-- Screen Wrapper -->
+  <div id="os-screen">
+
+    <!-- Top Unobtrusive Quick Switcher / Portfolio Hub -->
+    <header class="os-topbar-hud">
+      <a href="index.html" class="hud-chip">🌐 Modern View</a>
+      <a href="adventure.html" class="hud-chip">🧭 Adventure</a>
+      <a href="mystery.html" class="hud-chip">📁 Dossier</a>
+      <button class="hud-chip" id="btn-toggle-sound">🔊 Sound: ON</button>
+      <button class="hud-chip" id="btn-toggle-crt">📺 CRT: ON</button>
+    </header>
+
+    <!-- Desktop Area -->
+    <main id="desktop">
+      
+      <!-- Selection Bounding Box -->
+      <div id="selection-box"></div>
+
+      <!-- Desktop Icons Container -->
+      <div class="desktop-icons" id="desktop-icons">
+        
+        <!-- My Computer -->
+        <div class="desktop-icon" data-app="cpanel" id="icon-mycomputer">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="4" width="26" height="18" rx="1" fill="#c0c0c0" stroke="#000" stroke-width="1.5"/>
+              <rect x="6" y="7" width="20" height="12" fill="#008080"/>
+              <path d="M12 22 L10 27 L22 27 L20 22 Z" fill="#808080" stroke="#000" stroke-width="1.5"/>
+              <rect x="7" y="27" width="18" height="2" fill="#dfdfdf" stroke="#000" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="icon-label">My Computer</span>
+        </div>
+
+        <!-- bio.txt / Readme -->
+        <div class="desktop-icon" data-app="notepad" id="icon-bio">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M6 3 L20 3 L26 9 L26 29 L6 29 Z" fill="#ffffff" stroke="#000" stroke-width="1.5"/>
+              <path d="M20 3 L20 9 L26 9 Z" fill="#c0c0c0" stroke="#000" stroke-width="1.5"/>
+              <line x1="9" y1="12" x2="22" y2="12" stroke="#000080" stroke-width="1.5"/>
+              <line x1="9" y1="16" x2="22" y2="16" stroke="#000" stroke-width="1"/>
+              <line x1="9" y1="20" x2="19" y2="20" stroke="#000" stroke-width="1"/>
+              <line x1="9" y1="24" x2="22" y2="24" stroke="#000" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="icon-label">bio.txt</span>
+        </div>
+
+        <!-- Portfolio Case Studies Folder -->
+        <div class="desktop-icon" data-app="explorer" id="icon-portfolio">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M4 6 L12 6 L15 9 L28 9 L28 26 L4 26 Z" fill="#ffcc00" stroke="#000" stroke-width="1.5"/>
+              <path d="M2 11 L28 11 L26 26 L2 26 Z" fill="#ffe066" stroke="#000" stroke-width="1.5"/>
+              <rect x="8" y="14" width="12" height="8" fill="#fff" stroke="#000" stroke-width="1"/>
+              <line x1="10" y1="17" x2="18" y2="17" stroke="#000080"/>
+              <line x1="10" y1="19" x2="16" y2="19" stroke="#000"/>
+            </svg>
+          </div>
+          <span class="icon-label">Case Studies</span>
+        </div>
+
+        <!-- Mail Client / Outlook 97 -->
+        <div class="desktop-icon" data-app="mail" id="icon-mail">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="6" width="26" height="20" fill="#fffae6" stroke="#000" stroke-width="1.5"/>
+              <polyline points="3,6 16,18 29,6" stroke="#000" stroke-width="1.5" fill="none"/>
+              <polygon points="12,15 3,24 3,6" fill="#f0e6c8"/>
+              <polygon points="20,15 29,24 29,6" fill="#f0e6c8"/>
+              <circle cx="23" cy="9" r="3" fill="#ff3333"/>
+            </svg>
+          </div>
+          <span class="icon-label">Outlook 97</span>
+        </div>
+
+        <!-- MS-DOS Prompt / Terminal -->
+        <div class="desktop-icon" data-app="terminal" id="icon-terminal">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="5" width="26" height="22" fill="#000" stroke="#c0c0c0" stroke-width="1.5"/>
+              <path d="M7 11 L12 15 L7 19" stroke="#00ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="14" y1="19" x2="20" y2="19" stroke="#00ff00" stroke-width="2"/>
+            </svg>
+          </div>
+          <span class="icon-label">MS-DOS Prompt</span>
+        </div>
+
+        <!-- Recycle Bin (Funny Rejected Ideas) -->
+        <div class="desktop-icon" data-app="trash" id="icon-trash">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M9 10 L23 10 L21 28 L11 28 Z" fill="#c0c0c0" stroke="#000" stroke-width="1.5"/>
+              <line x1="6" y1="10" x2="26" y2="10" stroke="#000" stroke-width="2"/>
+              <path d="M12 10 L12 6 L20 6 L20 10" stroke="#000" stroke-width="1.5" fill="none"/>
+              <line x1="14" y1="14" x2="13" y2="24" stroke="#808080" stroke-width="1.5"/>
+              <line x1="18" y1="14" x2="19" y2="24" stroke="#808080" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="icon-label">Recycle Bin</span>
+        </div>
+
+        <!-- KwameAMP Winamp Music Player -->
+        <div class="desktop-icon" data-app="kwameamp" id="icon-kwameamp">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="4" width="26" height="24" rx="2" fill="#292929" stroke="#000" stroke-width="1.5"/>
+              <path d="M12 8 L22 16 L12 24 Z" fill="#00ff00"/>
+              <line x1="6" y1="23" x2="26" y2="23" stroke="#ff8800" stroke-width="2"/>
+              <line x1="6" y1="26" x2="26" y2="26" stroke="#ff0000" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="icon-label">KwameAMP</span>
+        </div>
+
+        <!-- MS Paint 95 -->
+        <div class="desktop-icon" data-app="paint" id="icon-paint">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="4" width="24" height="24" fill="#fff" stroke="#000" stroke-width="1.5"/>
+              <path d="M7 23 C10 17 18 10 23 7 C26 9 24 13 20 16 C17 19 13 22 7 23 Z" fill="#ff00ff" stroke="#000"/>
+              <circle cx="9" cy="9" r="3" fill="#ffcc00"/>
+              <circle cx="15" cy="7" r="2.5" fill="#00ccff"/>
+              <circle cx="21" cy="21" r="3" fill="#00ff66"/>
+            </svg>
+          </div>
+          <span class="icon-label">Paint 95</span>
+        </div>
+
+        <!-- SysAdmin Panic Mini-Game -->
+        <div class="desktop-icon" data-app="syspanic" id="icon-syspanic">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="4" width="24" height="24" fill="#1e293b" stroke="#ff3333" stroke-width="1.5"/>
+              <circle cx="16" cy="16" r="8" fill="#ff3333"/>
+              <path d="M16 11 L16 17 M16 20 L16 21" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="icon-label">SysPanic!</span>
+        </div>
+
+        <!-- Trophy Case / Achievements -->
+        <div class="desktop-icon" data-app="trophies" id="icon-trophies">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M8 6 L24 6 L22 17 C20 21 12 21 10 17 Z" fill="#ffd700" stroke="#b8860b" stroke-width="1.5"/>
+              <path d="M8 8 L4 10 C4 14 7 15 10 15" stroke="#b8860b" stroke-width="1.5" fill="none"/>
+              <path d="M24 8 L28 10 C28 14 25 15 22 15" stroke="#b8860b" stroke-width="1.5" fill="none"/>
+              <rect x="14" y="20" width="4" height="5" fill="#daa520"/>
+              <rect x="10" y="25" width="12" height="3" fill="#8b6508"/>
+            </svg>
+          </div>
+          <span class="icon-label">Trophies</span>
+        </div>
+
+        <!-- Minesweeper Mini-Game -->
+        <div class="desktop-icon" data-app="minesweeper" id="icon-minesweeper">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="4" width="24" height="24" fill="#c0c0c0" stroke="#000" stroke-width="1.5"/>
+              <circle cx="16" cy="16" r="6" fill="#000"/>
+              <line x1="16" y1="6" x2="16" y2="26" stroke="#000" stroke-width="2"/>
+              <line x1="6" y1="16" x2="26" y2="16" stroke="#000" stroke-width="2"/>
+              <line x1="9" y1="9" x2="23" y2="23" stroke="#000" stroke-width="1.5"/>
+              <line x1="23" y1="9" x2="9" y2="23" stroke="#000" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="1.5" fill="#fff"/>
+            </svg>
+          </div>
+          <span class="icon-label">Minesweeper</span>
+        </div>
+
+        <!-- Display Properties / Control Panel -->
+        <div class="desktop-icon" data-app="cpanel" id="icon-cpanel">
+          <div class="icon-img-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="6" width="24" height="18" fill="#3a6ea5" stroke="#000" stroke-width="1.5"/>
+              <rect x="7" y="9" width="18" height="12" fill="#fff"/>
+              <circle cx="16" cy="15" r="4" fill="#ff6600"/>
+              <path d="M11 24 L21 24 L20 28 L12 28 Z" fill="#808080" stroke="#000" stroke-width="1"/>
+            </svg>
+          </div>
+          <span class="icon-label">Display Theme</span>
+        </div>
+
+      </div>
+
+      <!-- Sticky Notes on Desk -->
+      <div class="sticky-note" id="sticky-1" style="top: 80px; right: 80px;">
+        <div class="sticky-pin"></div>
+        <div class="sticky-title">
+          <span>📌 QUICK MEMO</span>
+          <span class="sticky-close" onclick="this.parentElement.parentElement.style.display='none'">✕</span>
+        </div>
+        <div class="sticky-body" contenteditable="true">
+          <strong>Kwame Afriyie Ampomah (Mayer)</strong><br />
+          • IT Specialist & Systems Admin<br />
+          • Location: Taifa, Accra (GH)<br />
+          • Email: <a href="mailto:kwameampomah111@gmail.com">kwameampomah111@gmail.com</a><br />
+          • Tel: 0200121912<br />
+          <em>Tip: Double-click desktop icons or type commands in MS-DOS!</em>
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           WINDOWS CONTAINER
+           ========================================================================== -->
+
+      <!-- 1. NOTEPAD WINDOW (bio.txt) -->
+      <div class="os-window active" id="win-notepad" style="top: 40px; left: 160px; width: 560px; height: 420px;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><rect width="16" height="16" fill="#fff"/><line x1="3" y1="4" x2="13" y2="4" stroke="#000080"/><line x1="3" y1="8" x2="13" y2="8" stroke="#000"/><line x1="3" y1="12" x2="10" y2="12" stroke="#000"/></svg>
+            <span class="titlebar-title">bio.txt - Notepad</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize" title="Minimize">_</button>
+            <button class="win-btn win-maximize" title="Maximize">□</button>
+            <button class="win-btn win-close" title="Close">✕</button>
+          </div>
+        </div>
+        <div class="window-menubar">
+          <span class="menu-item" onclick="appManager.saveNotepad()">File</span>
+          <span class="menu-item" onclick="appManager.copyNotepad()">Edit</span>
+          <span class="menu-item">Format</span>
+          <span class="menu-item" onclick="appManager.showNotepadAbout()">Help</span>
+        </div>
+        <div class="window-body">
+          <textarea class="notepad-editor" id="notepad-text" spellcheck="false">===================================================================
+KWAME AFRIYIE AMPOMAH (MAYER) - SYSTEM PROFILE & BIOGRAPHY
+===================================================================
+
+[IDENTITY MATRIX]
+Role:         Information Technology Specialist & Systems Administrator
+Alias:        Mayer
+Location:     Taifa, Greater Accra Region, Ghana
+Education:    Valley View University (B.Ed in Information Technology)
+Status:       Ready to Deploy / IT & Infrastructure Consulting
+
+-------------------------------------------------------------------
+[PROFESSIONAL SUMMARY]
+Hands-on IT Specialist bridging the gap between web systems 
+administration, low-level hardware/storage recovery, and secure 
+networking infrastructure. 
+
+Proven ability to diagnose hybrid BIOS Optane storage anomalies, 
+recover macOS Internet partitions with expired SSL certs, 
+configure LAN-to-LAN access point routing, and manage high-traffic 
+content platforms (Wasscely, KEY WATCH GHANA).
+
+-------------------------------------------------------------------
+[TECHNICAL STACK & CORE COMPETENCIES]
+• Web & Systems:   WordPress, Git/GitHub, Apache/Nginx Caching, Wasscely
+• Diagnostics:     Intel Optane H20, GPT Partitioning, Diskpart, Ventoy
+• Networking:      LAN-to-LAN Bridging, TP-Link Archer MR200, Subnets, DHCP
+• OS Environments: Windows 11 (OOBE/MOK), Linux Shell, macOS Monterey
+• Hardware/Mods:   PS3 Custom Firmware (CFW), SSD Migrations, Thermal Mgt
+• Scripting/Logic: Python, Flowgorithm, Bash/CLI, PowerShell
+
+-------------------------------------------------------------------
+[CONTACT CHANNELS]
+Email:    kwameampomah111@gmail.com
+Phone:    0200121912
+GitHub:   https://github.com/kwameampomah
+LinkedIn: https://www.linkedin.com/in/kwame-ampomah-10175931b
+
+"Computers are like air conditioning: they become useless when you open Windows... unless you know how to configure the kernel."
+===================================================================</textarea>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane" id="notepad-status">Lines: 36 | Encoding: ANSI | Mode: Read/Write</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 2. FILE EXPLORER WINDOW (Case Studies / Portfolio) -->
+      <div class="os-window" id="win-explorer" style="top: 80px; left: 240px; width: 640px; height: 420px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><path d="M2 3 L6 3 L8 5 L14 5 L14 13 L2 13 Z" fill="#ffcc00" stroke="#000"/></svg>
+            <span class="titlebar-title">C:\Kwame\Portfolio_Projects</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-maximize">□</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-menubar">
+          <span class="menu-item">File</span>
+          <span class="menu-item">Edit</span>
+          <span class="menu-item">View</span>
+          <span class="menu-item">Help</span>
+        </div>
+        <div class="explorer-toolbar">
+          <button class="mail-btn" onclick="appManager.explorerUp()">⬆ Up</button>
+          <div class="explorer-address">
+            <span>Address:</span>
+            <input type="text" class="address-box" value="C:\Kwame\Portfolio_Projects" readonly />
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="explorer-content">
+            <div class="explorer-tree">
+              <div class="tree-item active">📁 Projects (6)</div>
+              <div class="tree-item" onclick="appManager.openApp('notepad')">📄 bio.txt</div>
+              <div class="tree-item" onclick="appManager.openApp('trash')">🗑️ Recycle Bin</div>
+              <div class="tree-item" onclick="appManager.openApp('mail')">✉️ Mailbox</div>
+            </div>
+            <div class="explorer-grid" id="explorer-items-list">
+              <!-- Dynamically populated / styled project items -->
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane" id="explorer-status">6 object(s) | 2.40 MB | Local Disk (C:)</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 3. PROJECT DOSSIER / IMAGE VIEWER WINDOW -->
+      <div class="os-window" id="win-viewer" style="top: 100px; left: 320px; width: 580px; height: 440px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><rect width="16" height="16" fill="#38bdf8"/><circle cx="8" cy="8" r="4" fill="#fff"/></svg>
+            <span class="titlebar-title" id="viewer-title">Case Study Viewer</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-maximize">□</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-body" id="viewer-content">
+          <!-- Dynamically populated case study content -->
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">Status: Verified Deployment & Analysis Complete</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 4. MAIL CLIENT WINDOW (Outlook 97) -->
+      <div class="os-window" id="win-mail" style="top: 70px; left: 200px; width: 620px; height: 430px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><rect width="16" height="12" y="2" fill="#fff" stroke="#000"/><polyline points="0,2 8,9 16,2" stroke="#000"/></svg>
+            <span class="titlebar-title">Outlook 97 - [Inbox / Contact Kwame]</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-maximize">□</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="mail-toolbar">
+          <button class="mail-btn" id="btn-mail-compose" onclick="appManager.showMailCompose()">✏️ New Message</button>
+          <button class="mail-btn" onclick="appManager.showMailInbox()">📥 Inbox (3)</button>
+          <button class="mail-btn" onclick="appManager.copyContactEmail()">📋 Copy Email</button>
+        </div>
+        <div class="window-body">
+          <div class="mail-layout" id="mail-view-inbox">
+            <div class="mail-split">
+              <div class="mail-inbox-list" id="mail-inbox-items">
+                <!-- Inbox Items -->
+              </div>
+              <div class="mail-viewer" id="mail-viewer-body">
+                <!-- Selected Mail Content -->
+              </div>
+            </div>
+          </div>
+          <div class="mail-compose-box" id="mail-view-compose" style="display: none;">
+            <div class="mail-meta-row">
+              <span class="mail-meta-label">To:</span>
+              <input type="text" class="compose-input" value="kwameampomah111@gmail.com (Kwame Afriyie Ampomah)" readonly />
+            </div>
+            <div class="mail-meta-row">
+              <span class="mail-meta-label">Subject:</span>
+              <input type="text" class="compose-input" id="compose-subject" placeholder="Project Inquiry / Job Opportunity / Hello Kwame" />
+            </div>
+            <textarea class="compose-input compose-textarea" id="compose-message" placeholder="Hi Kwame, I checked out your Virtual Desktop portfolio and would love to connect regarding..."></textarea>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+              <button class="mail-btn" onclick="appManager.sendMailForm()">📨 Send Transmission (Mailto)</button>
+              <button class="mail-btn" onclick="appManager.showMailInbox()">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">Account: kwameampomah111@gmail.com | Phone: 0200121912 | Connected</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 5. RECYCLE BIN WINDOW (Funny Rejected Ideas) -->
+      <div class="os-window" id="win-trash" style="top: 120px; left: 260px; width: 560px; height: 380px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><path d="M4 4 L12 4 L11 14 L5 14 Z" fill="#808080" stroke="#000"/></svg>
+            <span class="titlebar-title">Recycle Bin - [Funny Rejected Ideas]</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-maximize">□</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="mail-toolbar">
+          <button class="mail-btn" onclick="appManager.emptyTrash()">🗑️ Empty Recycle Bin</button>
+          <button class="mail-btn" onclick="appManager.restoreTrash()">♻️ Restore Ideas</button>
+        </div>
+        <div class="window-body">
+          <div class="trash-grid" id="trash-container">
+            <table class="trash-table">
+              <thead>
+                <tr>
+                  <th>File Name</th>
+                  <th>Original Location</th>
+                  <th>Date Deleted</th>
+                  <th>Size</th>
+                </tr>
+              </thead>
+              <tbody id="trash-table-body">
+                <!-- Rejected ideas listed here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane" id="trash-status">6 item(s) selected | Rejected for safety reasons</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 6. MS-DOS / TERMINAL WINDOW -->
+      <div class="os-window" id="win-terminal" style="top: 60px; left: 180px; width: 620px; height: 390px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><rect width="16" height="16" fill="#000"/><text x="2" y="12" fill="#0f0" font-size="10" font-family="monospace">&gt;_</text></svg>
+            <span class="titlebar-title">MS-DOS Prompt - Kwame OS</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-maximize">□</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-body terminal-window-body" id="term-container">
+          <div class="term-output-area" id="term-output">
+Kwame OS 95 [Version 4.00.950]
+(C) Copyright Microsoft Corp / Kwame Afriyie Ampomah 1995-2026.
+
+Type "HELP" for available system commands.
+          </div>
+          <div class="term-input-row">
+            <span class="term-prompt-txt">C:\KWAME&gt;</span>
+            <input type="text" class="term-input" id="term-input" autocomplete="off" autofocus />
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">Terminal Ready | Type 'help' or 'matrix'</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 7. MINESWEEPER WINDOW -->
+      <div class="os-window" id="win-minesweeper" style="top: 90px; left: 340px; width: 280px; height: 350px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="#000"/><line x1="8" y1="2" x2="8" y2="14" stroke="#000"/></svg>
+            <span class="titlebar-title">Minesweeper</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-menubar">
+          <span class="menu-item" onclick="minesweeper.init()">Game</span>
+          <span class="menu-item" onclick="minesweeper.init()">Restart</span>
+        </div>
+        <div class="window-body" style="display:flex; justify-content:center; align-items:center; background:#c0c0c0;">
+          <div class="minesweeper-app">
+            <div class="minesweeper-header">
+              <div class="mine-digit-display" id="mine-flags-left">010</div>
+              <button class="mine-face-btn" id="mine-reset-btn" onclick="minesweeper.init()">🙂</button>
+              <div class="mine-digit-display" id="mine-timer">000</div>
+            </div>
+            <div class="mine-grid" id="mine-grid">
+              <!-- 9x9 Minefield cells -->
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">Right-click to flag, left-click to clear</div>
+        </div>
+      </div>
+
+      <!-- 8. DISPLAY PROPERTIES / THEME CONTROL PANEL -->
+      <div class="os-window" id="win-cpanel" style="top: 110px; left: 220px; width: 440px; height: 360px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><rect width="16" height="12" fill="#3a6ea5"/><circle cx="8" cy="6" r="3" fill="#ff6600"/></svg>
+            <span class="titlebar-title">Display Properties</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="cpanel-container">
+            <div class="cpanel-row">
+              <div>
+                <div class="cpanel-label">Visual Theme Scheme:</div>
+                <small style="color:var(--os-text-muted);">Choose your operating system aesthetic</small>
+              </div>
+              <select class="cpanel-select" id="theme-selector" onchange="appManager.setTheme(this.value)">
+                <option value="theme-win95">Windows 95 Classic (Teal)</option>
+                <option value="theme-scifi">Cyber Sci-Fi Terminal (Neon)</option>
+                <option value="theme-mac">Classic Mac System 7 (Platinum)</option>
+                <option value="theme-desk">Messy Creative Desk (Wood/Notes)</option>
+              </select>
+            </div>
+            <div class="cpanel-row">
+              <div>
+                <div class="cpanel-label">CRT Scanline Filter:</div>
+                <small style="color:var(--os-text-muted);">Simulate authentic 90s cathode ray tube flicker</small>
+              </div>
+              <button class="mail-btn" onclick="appManager.toggleCRT()">Toggle Scanlines</button>
+            </div>
+            <div class="cpanel-row">
+              <div>
+                <div class="cpanel-label">Synthesizer Sound Effects:</div>
+                <small style="color:var(--os-text-muted);">Web Audio API chimes, clicks, & floppy noise</small>
+              </div>
+              <button class="mail-btn" onclick="appManager.toggleSound()">Toggle Sound</button>
+            </div>
+            <div class="cpanel-row">
+              <div>
+                <div class="cpanel-label">Trigger System Diagnostics:</div>
+                <small style="color:var(--os-text-muted);">Simulate legendary crash screen</small>
+              </div>
+              <button class="mail-btn" onclick="appManager.triggerBSOD()">Simulate BSOD</button>
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">Display: 1024x768 | 256 Colors | VGA Compatible</div>
+        </div>
+      </div>
+
+      <!-- 9. KWAMEAMP WINAMP 2.X MUSIC PLAYER -->
+      <div class="os-window" id="win-kwameamp" style="top: 70px; left: 380px; width: 330px; height: 350px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><rect width="16" height="16" fill="#000"/><path d="M5 3 L12 8 L5 13 Z" fill="#0f0"/></svg>
+            <span class="titlebar-title">KwameAMP v2.91 - Chiptune & Synth</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-body" style="background:#292929; padding:0; overflow:hidden;">
+          <div class="winamp-main">
+            <div class="winamp-display">
+              <div class="winamp-top-row">
+                <span class="winamp-kbps">128 KBPS / 44.1 KHZ</span>
+                <span class="winamp-time" id="amp-time">00:00</span>
+              </div>
+              <div class="winamp-track-marquee" id="amp-marquee">1. Kwame Afriyie - 8-Bit Taifa Groove [01:45] ***</div>
+              <canvas class="winamp-visualizer-canvas" id="amp-visualizer" width="300" height="48"></canvas>
+            </div>
+            <div class="winamp-controls-row">
+              <div style="display: flex; gap: 2px;">
+                <button class="winamp-btn" id="amp-prev" title="Previous Track">|&lt;&lt;</button>
+                <button class="winamp-btn" id="amp-play" title="Play">▶</button>
+                <button class="winamp-btn" id="amp-pause" title="Pause">❚❚</button>
+                <button class="winamp-btn" id="amp-stop" title="Stop">■</button>
+                <button class="winamp-btn" id="amp-next" title="Next Track">&gt;&gt;|</button>
+              </div>
+              <div class="winamp-slider-group">
+                <span>VOL</span>
+                <input type="range" class="winamp-slider" id="amp-volume" min="0" max="100" value="75" />
+              </div>
+            </div>
+            <div class="winamp-playlist" id="amp-playlist">
+              <div class="winamp-pl-item active" data-index="0">1. 8-Bit Taifa Groove (Chiptune)</div>
+              <div class="winamp-pl-item" data-index="1">2. Cyber Optane Drift (Synthwave)</div>
+              <div class="winamp-pl-item" data-index="2">3. SysAdmin Midnight Coffee (Lo-Fi)</div>
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">WINAMP AUDIO ENGINE: SYNTH ACTIVE</div>
+        </div>
+      </div>
+
+      <!-- 10. MS PAINT 95 -->
+      <div class="os-window" id="win-paint" style="top: 50px; left: 140px; width: 660px; height: 460px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><path d="M2 14 C4 10 10 6 14 2 C16 4 14 8 10 11 C8 13 4 14 2 14 Z" fill="#ff00ff"/><circle cx="5" cy="5" r="2" fill="#ffcc00"/></svg>
+            <span class="titlebar-title">untitled - Paint 95</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-maximize">□</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-menubar">
+          <span class="menu-item" onclick="paintApp.downloadCanvas()">Save As PNG</span>
+          <span class="menu-item" onclick="paintApp.clearCanvas()">Clear</span>
+          <span class="menu-item" onclick="appManager.showToast('Tip: Use spray can or fill bucket to doodle!')">Help</span>
+        </div>
+        <div class="window-body" style="background:#c0c0c0; padding:0; overflow:hidden;">
+          <div class="paint-layout">
+            <div class="paint-tools-sidebar">
+              <div class="paint-tools-grid">
+                <button class="paint-tool-btn active" data-tool="pencil" title="Pencil">✏️</button>
+                <button class="paint-tool-btn" data-tool="brush" title="Brush">🖌️</button>
+                <button class="paint-tool-btn" data-tool="spray" title="Airbrush / Spray Can">💨</button>
+                <button class="paint-tool-btn" data-tool="eraser" title="Eraser">🧹</button>
+                <button class="paint-tool-btn" data-tool="bucket" title="Fill Bucket">🪣</button>
+                <button class="paint-tool-btn" data-tool="line" title="Straight Line">📏</button>
+              </div>
+              <div class="paint-stroke-picker">
+                <div class="paint-size-option" data-size="1"><div class="paint-size-dot" style="width:2px; height:2px;"></div></div>
+                <div class="paint-size-option active" data-size="3"><div class="paint-size-dot" style="width:4px; height:4px;"></div></div>
+                <div class="paint-size-option" data-size="6"><div class="paint-size-dot" style="width:7px; height:7px;"></div></div>
+                <div class="paint-size-option" data-size="12"><div class="paint-size-dot" style="width:11px; height:11px;"></div></div>
+              </div>
+            </div>
+            <div class="paint-workspace">
+              <div class="paint-canvas-container">
+                <canvas id="paint-canvas" width="540" height="320"></canvas>
+              </div>
+              <div class="paint-palette-bar">
+                <div class="paint-current-colors">
+                  <div id="paint-selected-color"></div>
+                </div>
+                <div class="paint-color-swatches" id="paint-swatches">
+                  <!-- 16 classic palette colors injected via JS -->
+                </div>
+                <button class="mail-btn" onclick="paintApp.downloadCanvas()" style="margin-left:auto;">💾 Save PNG</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane" id="paint-status">Canvas: 540x320 | Tool: Pencil</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 11. SYSADMIN PANIC! MICRO-GAME -->
+      <div class="os-window" id="win-syspanic" style="top: 60px; left: 240px; width: 620px; height: 440px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#ff3333"/><text x="6" y="12" fill="#fff" font-weight="bold">!</text></svg>
+            <span class="titlebar-title">🚨 SysAdmin Panic! - Data Center Crisis</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-body" style="background:#10141e; padding:0; overflow:hidden;">
+          <div class="syspanic-arena">
+            <div class="syspanic-hud">
+              <div>TIME: <span id="panic-timer" style="color:#00ffcc; font-size:16px;">60s</span></div>
+              <div class="syspanic-meter-wrap">
+                <span>UPTIME:</span>
+                <div class="syspanic-bar-bg">
+                  <div class="syspanic-bar-fill" id="panic-uptime-bar"></div>
+                </div>
+                <span id="panic-uptime-val" style="color:#00ff66;">100%</span>
+              </div>
+              <div>RESOLVED: <span id="panic-score" style="color:#ffd700; font-size:16px;">0</span></div>
+            </div>
+            <div class="syspanic-field" id="panic-field">
+              <!-- Server racks & incident popups dynamically spawn here -->
+            </div>
+            <div class="syspanic-overlay" id="panic-overlay">
+              <h2 style="color:#ffd700; font-size:20px;">🚨 DATA CENTER CRISIS SIMULATOR</h2>
+              <p style="max-width:380px; font-size:12px; color:#ddd; line-height:1.4;">
+                Server racks are overheating, DNS tables are failing, and patch cables are disconnecting! 
+                Click on the critical incidents before uptime falls below 99.0%!
+              </p>
+              <button class="mail-btn" onclick="sysAdminGame.start()" style="font-size:14px; padding:6px 16px; background:#00aa44; color:#fff; border-color:#fff;">▶ START SHIFT (60s)</button>
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">MISSION: Keep Kwame Data Center at 99.999% Uptime</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+      <!-- 12. TROPHY CASE / ACHIEVEMENTS WINDOW -->
+      <div class="os-window" id="win-trophies" style="top: 80px; left: 280px; width: 520px; height: 410px; display: none;">
+        <div class="window-titlebar">
+          <div class="titlebar-left">
+            <svg class="titlebar-icon" viewBox="0 0 16 16"><path d="M4 2 L12 2 L11 9 C10 12 6 12 5 9 Z" fill="#ffd700"/></svg>
+            <span class="titlebar-title">Hall of Fame - System Achievements</span>
+          </div>
+          <div class="titlebar-controls">
+            <button class="win-btn win-minimize">_</button>
+            <button class="win-btn win-close">✕</button>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="trophy-container">
+            <div class="trophy-progress-card">
+              <div>
+                <strong>PORTFOLIO MASTERY</strong>
+                <div style="font-size:11px; color:var(--os-text-muted);" id="trophy-count-label">0 of 10 Trophies Unlocked</div>
+              </div>
+              <div style="font-size:18px; font-weight:bold; color:#ffd700;" id="trophy-percent-label">0%</div>
+            </div>
+            <div class="trophy-grid" id="trophy-grid-display">
+              <!-- Dynamically populated trophy badges -->
+            </div>
+          </div>
+        </div>
+        <div class="window-statusbar">
+          <div class="status-pane">Tip: Explore all 4 modes & try the secret Konami Code!</div>
+        </div>
+        <div class="window-resizer"></div>
+      </div>
+
+    </main>
+
+    <!-- Kwam-E (Animated Retro Desktop Assistant) -->
+    <div id="kwam-e-container">
+      <div class="kwame-bubble" id="kwame-bubble" style="display:none;">
+        <span class="kwame-bubble-close" onclick="kwamE.hideBubble()">✕</span>
+        <div id="kwame-bubble-text">Hi! I'm Kwam-E, your IT assistant. Click me for tech jokes or advice!</div>
+      </div>
+      <div class="kwame-avatar-box" id="kwame-avatar" onclick="kwamE.handleClick()">
+        <svg viewBox="0 0 64 64" fill="none">
+          <!-- Animated Retro Robo-Clip Body -->
+          <ellipse cx="32" cy="34" rx="20" ry="22" fill="#d9d9d9" stroke="#000" stroke-width="2.5"/>
+          <ellipse cx="32" cy="34" rx="16" ry="18" fill="#f0f0f0"/>
+          <!-- Big Pixel Cartoon Eyes -->
+          <circle cx="25" cy="30" r="6" fill="#fff" stroke="#000" stroke-width="2"/>
+          <circle cx="39" cy="30" r="6" fill="#fff" stroke="#000" stroke-width="2"/>
+          <circle cx="26" cy="30" r="2.5" fill="#000" id="kwame-eye-l"/>
+          <circle cx="40" cy="30" r="2.5" fill="#000" id="kwame-eye-r"/>
+          <!-- Smile -->
+          <path d="M26 42 Q32 48 38 42" stroke="#000" stroke-width="2.5" stroke-linecap="round" fill="none" id="kwame-mouth"/>
+          <!-- Antenna -->
+          <line x1="32" y1="12" x2="32" y2="4" stroke="#000" stroke-width="2"/>
+          <circle cx="32" cy="4" r="3.5" fill="#ff3333"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Interactive Desk Props (Visible in Desk Theme) -->
+    <div id="desk-props">
+      <!-- Coffee Mug -->
+      <div class="desk-prop" id="prop-coffee" onclick="appManager.sipCoffee()" title="Click to take a sip of SysAdmin Coffee">
+        <svg viewBox="0 0 40 40">
+          <ellipse cx="18" cy="10" rx="14" ry="5" fill="#6d4c41" stroke="#3e2723" stroke-width="1.5"/>
+          <rect x="4" y="10" width="28" height="22" rx="3" fill="#8d6e63" stroke="#3e2723" stroke-width="1.5"/>
+          <ellipse cx="18" cy="32" rx="14" ry="4" fill="#6d4c41" stroke="#3e2723" stroke-width="1.5"/>
+          <path d="M32 14 C38 14 38 26 32 26" fill="none" stroke="#3e2723" stroke-width="3" stroke-linecap="round"/>
+          <text x="11" y="24" font-size="7" font-weight="bold" fill="#fff">IT</text>
+        </svg>
+      </div>
+      <!-- Desk Lamp -->
+      <div class="desk-prop" id="prop-lamp" onclick="appManager.toggleLamp()" title="Pull chain to toggle desk illumination">
+        <svg viewBox="0 0 50 70">
+          <path d="M10 25 L40 25 L46 45 L4 45 Z" fill="#2e7d32" stroke="#1b5e20" stroke-width="2"/>
+          <rect x="23" y="45" width="4" height="20" fill="#daa520"/>
+          <ellipse cx="25" cy="65" rx="16" ry="4" fill="#b8860b"/>
+          <line x1="36" y1="45" x2="36" y2="54" stroke="#ffeb3b" stroke-width="1.5"/>
+          <circle cx="36" cy="55" r="2" fill="#ffd700"/>
+        </svg>
+      </div>
+      <!-- Stress Ball -->
+      <div class="desk-prop" id="prop-ball" onclick="appManager.bounceBall()" title="Click to bounce stress ball"></div>
+    </div>
+
+    <!-- Konami Celebration Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Taskbar -->
+    <footer id="taskbar">
+      <!-- Start Button -->
+      <button class="start-btn" id="btn-start" onclick="appManager.toggleStartMenu()">
+        <svg class="start-logo" viewBox="0 0 20 20">
+          <rect x="2" y="2" width="7" height="7" fill="#f25022"/>
+          <rect x="11" y="2" width="7" height="7" fill="#7fba00"/>
+          <rect x="2" y="11" width="7" height="7" fill="#00a4ef"/>
+          <rect x="11" y="11" width="7" height="7" fill="#ffb900"/>
+        </svg>
+        <span>Start</span>
+      </button>
+
+      <div class="taskbar-divider"></div>
+
+      <!-- Quick Launch Tasks -->
+      <div class="taskbar-tasks" id="taskbar-tasks">
+        <!-- Dynamically managed window tabs -->
+      </div>
+
+      <div class="taskbar-divider"></div>
+
+      <!-- System Tray -->
+      <div class="system-tray">
+        <div class="tray-modem" title="Bandwidth Traffic: 200Mbps iKlick Active">
+          <div class="modem-led blink-green" id="led-tx"></div>
+          <div class="modem-led blink-yellow" id="led-rx"></div>
+        </div>
+        <svg class="tray-icon" viewBox="0 0 16 16" fill="currentColor" id="tray-sound-icon" onclick="appManager.toggleSound()" title="Audio Toggle">
+          <path d="M8 2 L4 6 L1 6 L1 10 L4 10 L8 14 Z M11 5 C12 6.5 12 9.5 11 11 M13 3 C15 5.5 15 10.5 13 13"/>
+        </svg>
+        <span class="clock-display" id="clock-widget">12:00 PM</span>
+      </div>
+    </footer>
+
+    <!-- Start Menu Popup -->
+    <div id="start-menu">
+      <div class="start-sidebar">
+        <div class="start-sidebar-text">KWAME 95</div>
+      </div>
+      <div class="start-items">
+        <div class="start-item" onclick="appManager.openApp('notepad')">
+          <svg viewBox="0 0 16 16"><rect width="16" height="16" fill="#fff" stroke="#000"/><line x1="3" y1="4" x2="13" y2="4" stroke="#000080"/></svg>
+          <span>bio.txt (About Me)</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('explorer')">
+          <svg viewBox="0 0 16 16"><path d="M2 3 L6 3 L8 5 L14 5 L14 13 L2 13 Z" fill="#ffcc00" stroke="#000"/></svg>
+          <span>Case Studies Folder</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('kwameamp')">
+          <svg viewBox="0 0 16 16"><rect width="16" height="16" fill="#292929"/><path d="M5 3 L12 8 L5 13 Z" fill="#0f0"/></svg>
+          <span>KwameAMP (Chiptune)</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('paint')">
+          <svg viewBox="0 0 16 16"><path d="M2 14 C4 10 10 6 14 2 C16 4 14 8 10 11 Z" fill="#f0f"/><circle cx="5" cy="5" r="2" fill="#ff0"/></svg>
+          <span>Paint 95 (Doodle)</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('syspanic')">
+          <svg viewBox="0 0 16 16"><rect width="16" height="16" fill="#1e293b"/><circle cx="8" cy="8" r="6" fill="#f33"/></svg>
+          <span>SysAdmin Panic! (Game)</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('trophies')">
+          <svg viewBox="0 0 16 16"><path d="M4 2 L12 2 L11 9 C10 12 6 12 5 9 Z" fill="#ffd700"/></svg>
+          <span>Achievements & Trophies</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('mail')">
+          <svg viewBox="0 0 16 16"><rect width="16" height="12" y="2" fill="#fff" stroke="#000"/><polyline points="0,2 8,9 16,2" stroke="#000"/></svg>
+          <span>Outlook 97 (Contact)</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('terminal')">
+          <svg viewBox="0 0 16 16"><rect width="16" height="16" fill="#000"/><text x="2" y="12" fill="#0f0" font-size="10" font-family="monospace">&gt;_</text></svg>
+          <span>MS-DOS Prompt</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('minesweeper')">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="#000"/></svg>
+          <span>Minesweeper</span>
+        </div>
+        <div class="start-item" onclick="appManager.openApp('trash')">
+          <svg viewBox="0 0 16 16"><path d="M4 4 L12 4 L11 14 L5 14 Z" fill="#808080" stroke="#000"/></svg>
+          <span>Recycle Bin</span>
+        </div>
+        <div class="start-sep"></div>
+        <div class="start-item" onclick="appManager.openApp('cpanel')">
+          <svg viewBox="0 0 16 16"><rect width="16" height="12" fill="#3a6ea5"/><circle cx="8" cy="6" r="3" fill="#ff6600"/></svg>
+          <span>Control Panel</span>
+        </div>
+        <a href="index.html" class="start-item">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#38bdf8"/></svg>
+          <span>Modern Portfolio View</span>
+        </a>
+        <div class="start-sep"></div>
+        <div class="start-item" onclick="appManager.triggerShutDown()">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#ff3333" fill="none" stroke-width="2"/><line x1="8" y1="2" x2="8" y2="8" stroke="#ff3333" stroke-width="2"/></svg>
+          <span>Shut Down...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Context Menu -->
+    <div id="context-menu">
+      <div class="context-item" onclick="appManager.newStickyNote()">📝 New Sticky Note</div>
+      <div class="context-item" onclick="appManager.openApp('terminal')">💻 Open Terminal Here</div>
+      <div class="context-item" onclick="appManager.openApp('cpanel')">⚙️ Display Properties</div>
+      <div class="start-sep"></div>
+      <div class="context-item" onclick="appManager.refreshDesktop()">🔄 Refresh</div>
+    </div>
+
+    <!-- BSOD Screen -->
+    <div id="bsod-screen">
+      <div class="bsod-header">KWAME_OS</div>
+      <p>A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36.</p>
+      <p>The current application will be terminated.</p>
+      <p>* Press any key or click Restart to restore system stability.<br />* You will lose any unsaved quantum coffee.</p>
+      <p>System Specs: Kwame Afriyie Ampomah (IT Specialist & Systems Admin)</p>
+      <button class="bsod-btn" onclick="appManager.recoverBSOD()">Press To Restart Kwame OS</button>
+    </div>
+
+  </div>
+
+  <script src="desktop.js"></script>
+</body>
+</html>

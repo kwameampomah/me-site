@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PROJECT BLACKOUT // Classified Dossier & Ops Bench - Kwame Afriyie Ampomah</title>
+  <meta name="description" content="Classified IT & Systems Investigation Dossier, Hardware Modding Bench, and Interactive Clearance Suite for Kwame Afriyie Ampomah (Mayer)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="mystery.css" />
+  <link rel="stylesheet" href="fun-engine.css" />
+  <link rel="stylesheet" href="minigames.css" />
+</head>
+<body class="torch-mode-normal">
+  <!-- Canvases & Atmospheric Masks -->
+  <div class="flashlight-mask" id="flashlight"></div>
+  <canvas class="matrix-canvas" id="matrix-canvas"></canvas>
+  <div class="flicker-overlay" id="flicker"></div>
+  <div class="nightvision-overlay" id="nvg-overlay"></div>
+  <div class="scanlines"></div>
+
+  <!-- HUD / Control Deck (Always visible & interactive) -->
+  <header class="hud-bar">
+    <div class="hud-section hud-left">
+      <span class="hud-status-indicator pulse-green"></span>
+      <span class="hud-label">SECTOR: TAIFA // ACCRA</span>
+      <span class="hud-divider">|</span>
+      <span class="hud-clearance-box" id="clearance-box" title="View Investigation Clearance & Badges">
+        CLEARANCE: <strong id="hud-level">LVL 1 [RECRUIT]</strong> &bull; <span id="hud-xp">0</span>% XP
+      </span>
+    </div>
+
+    <div class="hud-center">
+      <span class="hud-title">CLASSIFIED ARCHIVE // DOSSIER 81801</span>
+    </div>
+
+    <div class="hud-section hud-right">
+      <!-- Spectrum Cycler -->
+      <button class="hud-btn spectrum-btn" id="spectrum-toggle" title="Cycle Vision Spectrums: White Torch, UV Blacklight, Night Vision, Thermal (Press 'U' or 'Space')">
+        <span class="btn-lamp-icon" id="spectrum-icon">💡</span>
+        <span class="btn-text">SPECTRUM: <span id="beam-mode-text">WHITE TORCH</span></span>
+      </button>
+
+      <!-- Voice Debrief Trigger -->
+      <button class="hud-btn" id="voice-briefing-btn" title="Initiate AI Classified Audio Debrief (Web Speech)">
+        <span>🎙️</span>
+        <span class="btn-text">VOICE DEBRIEF</span>
+      </button>
+
+      <!-- Audio Synth Soundboard Toggle -->
+      <button class="hud-btn" id="audio-toggle" title="Toggle Synthesized Audio Hum & Retro Chimes">
+        <span id="audio-icon">🔇</span>
+        <span class="btn-text">AUDIO</span>
+      </button>
+
+      <!-- Badges / Achievements Modal Trigger -->
+      <button class="hud-btn" id="badges-trigger" title="View Unlocked Detective Badges">
+        <span>🏆</span>
+        <span class="btn-text">BADGES</span>
+      </button>
+
+      <!-- Terminal Trigger -->
+      <button class="hud-btn highlight" id="terminal-trigger" title="Open Investigative Terminal (Press 'T' or 'Ctrl+K')">
+        <span>&gt;_</span>
+        <span class="btn-text">TERMINAL</span>
+      </button>
+
+      <!-- Switch to Virtual Desktop -->
+      <a href="desktop.html" class="hud-btn highlight" style="border-color: #34d399; color: #34d399;" title="Launch Windows 95 / Sci-Fi Virtual Desktop">
+        <span>🖥️</span>
+        <span class="btn-text">VIRTUAL DESKTOP</span>
+      </a>
+
+      <!-- Switch to Standard Portfolio -->
+      <a href="index.html" class="hud-btn return-btn" title="Return to Standard Portfolio View">
+        <span>☀️</span>
+        <span class="btn-text">LIGHT MODE</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Darkness Viewport -->
+  <main class="darkness-container" id="darkness-area">
+    
+    <!-- Hero / Redacted Subject Profile -->
+    <section class="dossier-hero">
+      <div class="top-secret-stamp">TOP SECRET // RESTRICTED</div>
+      <div class="classification-header">
+        <div class="classification-box">FILE REF: VVU-IT-2026-X</div>
+        <div class="classification-box">SUBJECT STATUS: ACTIVE</div>
+        <div class="classification-box hint-box">HINT: PRESS <kbd>&uarr;&uarr;&darr;&darr;&larr;&rarr;&larr;&rarr;BA</kbd> FOR OVERDRIVE</div>
+      </div>
+
+      <h1 class="hero-codename">
+        SUBJECT: <span class="decrypt-text" data-val="KWAME AFRIYIE AMPOMAH">KWAME AFRIYIE AMPOMAH</span>
+      </h1>
+      <p class="hero-alias-line">KNOWN ALIAS: <span class="alias-tag glow-amber">MAYER</span> // OPERATIVE ID: <span class="glow-cyan">#81801</span></p>
+
+      <!-- Secret UV message (visible only under UV mode) -->
+      <div class="uv-secret uv-text">
+        ⚠ [UV DECRYPTED] STEAM: bigkwamz1 // DISCORD: attackingattitude_81801 // PASSCODE: "VENTOY-MOK-2026"
+      </div>
+
+      <p class="dossier-summary">
+        Specialist operative deployed in <strong>Web Systems Infrastructure</strong>, <strong>Hardware & Storage Forensics</strong>, <strong>Version Control</strong>, and <strong>Subnet Routing</strong>. Active stations: Valley View University, Maxim Nyansa, and KEY WATCH GHANA.
+      </p>
+
+      <div class="quick-actions-bar">
+        <button class="btn-tactical btn-primary-tactical" id="hero-play-voice">
+          <span>▶</span> PLAY CLASSIFIED AUDIO BRIEFING
+        </button>
+        <button class="btn-tactical btn-secondary-tactical" id="hero-open-bench">
+          <span>🛠</span> ACCESS HARDWARE MOD BENCH
+        </button>
+        <button class="btn-tactical btn-secondary-tactical" id="hero-launch-terminal">
+          <span>&gt;_</span> LAUNCH CLI TERMINAL (MINI-GAMES)
+        </button>
+      </div>
+
+      <div class="quick-tactical-specs">
+        <div class="spec-node">
+          <span class="spec-label">BASE STATION:</span>
+          <span class="spec-val">Taifa, Greater Accra, Ghana</span>
+        </div>
+        <div class="spec-node">
+          <span class="spec-label">PRIMARY RIG:</span>
+          <span class="spec-val">Acer Aspire Go 14</span>
+        </div>
+        <div class="spec-node">
+          <span class="spec-label">MOBILE LINK:</span>
+          <span class="spec-val">Samsung Galaxy A06</span>
+        </div>
+        <div class="spec-node">
+          <span class="spec-label">ACADEMIC POST:</span>
+          <span class="spec-val">Valley View University (B.Ed IT)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Interactive Hardware Modding Bench -->
+    <section class="mod-bench-section" id="mod-bench">
+      <div class="section-badge-glitch">/// INTERACTIVE HARDWARE MOD BENCH</div>
+      <p class="section-desc">Click and interact with virtual operative rigs to test hardware configurations, firmware flashes, and partition states.</p>
+
+      <div class="bench-grid">
+        
+        <!-- Bench 1: PS3 Slim Mod Rig -->
+        <div class="bench-card" id="bench-ps3">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="bench-header">
+            <span class="bench-tag">CONSOLE LAB</span>
+            <span class="bench-status" id="ps3-status-pill">STOCK HDD</span>
+          </div>
+          <h4>Sony PlayStation 3 Slim (CECH-2504B)</h4>
+          <p class="bench-details">Date Code: 0D &bull; Mod: Custom Firmware & webMAN MOD</p>
+
+          <div class="bench-screen" id="ps3-display">
+            <div class="screen-line"><span class="k">STORAGE:</span> <span id="ps3-drive-text" class="v">Mechanical 5400RPM HDD</span></div>
+            <div class="screen-line"><span class="k">FIRMWARE:</span> <span id="ps3-fw-text" class="v">Official Sony OFW 4.90</span></div>
+            <div class="screen-line"><span class="k">THERMAL:</span> <span id="ps3-temp-text" class="v warn">CELL: 72°C | RSX: 68°C</span></div>
+            <div class="screen-line"><span class="k">REMOTE STREAM:</span> <span id="ps3-stream-text" class="v dim">OFFLINE</span></div>
+          </div>
+
+          <div class="bench-controls">
+            <button class="btn-bench" id="btn-ps3-ssd">Swap to SATA SSD</button>
+            <button class="btn-bench" id="btn-ps3-cfw">Inject Custom Firmware</button>
+            <button class="btn-bench" id="btn-ps3-webman">Deploy webMAN MOD</button>
+          </div>
+        </div>
+
+        <!-- Bench 2: TP-Link Network Bridge -->
+        <div class="bench-card" id="bench-router">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="bench-header">
+            <span class="bench-tag">NETWORKING LAB</span>
+            <span class="bench-status" id="router-status-pill">STANDALONE</span>
+          </div>
+          <h4>TP-Link Archer MR200 v1 Access Point</h4>
+          <p class="bench-details">Link: LAN-to-LAN Ethernet &bull; Primary: Tenda Gateway</p>
+
+          <div class="bench-screen" id="router-display">
+            <div class="screen-line"><span class="k">FIRMWARE:</span> <span id="router-fw-text" class="v warn">v0.9.1 (Factory Outdated)</span></div>
+            <div class="screen-line"><span class="k">LAN IP:</span> <span id="router-ip-text" class="v">192.168.1.1 (Subnet Conflict)</span></div>
+            <div class="screen-line"><span class="k">DHCP SERVER:</span> <span id="router-dhcp-text" class="v warn">ACTIVE (Rogue Broadcast)</span></div>
+            <div class="screen-line"><span class="k">BRIDGE STATE:</span> <span id="router-bridge-text" class="v dim">DISCONNECTED</span></div>
+          </div>
+
+          <div class="bench-controls">
+            <button class="btn-bench" id="btn-router-flash">Flash Firmware v1.0.5</button>
+            <button class="btn-bench" id="btn-router-ip">Set Subnet 192.168.0.2</button>
+            <button class="btn-bench" id="btn-router-dhcp">Deactivate Rogue DHCP</button>
+          </div>
+        </div>
+
+        <!-- Bench 3: Ventoy Multiboot Station -->
+        <div class="bench-card" id="bench-ventoy">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="bench-header">
+            <span class="bench-tag">DEPLOYMENT LAB</span>
+            <span class="bench-status">MULTIBOOT READY</span>
+          </div>
+          <h4>Ventoy Custom Deployment Media</h4>
+          <p class="bench-details">MOK Verification & Registry Exploit Engine</p>
+
+          <div class="bench-screen" id="ventoy-display">
+            <div class="screen-line"><span class="k">SELECT BOOT TARGET:</span></div>
+            <div class="boot-options">
+              <button class="boot-opt-btn active" data-target="win11">1. Win11_24H2_Bypass.iso (OOBE Override)</button>
+              <button class="boot-opt-btn" data-target="macos">2. macOS_Monterey_InternetRecovery.iso</button>
+              <button class="boot-opt-btn" data-target="optane">3. Intel_Optane_GPT_SectorRescue.iso</button>
+            </div>
+            <div class="screen-line output-line" id="ventoy-output-text">&gt; Selected: Windows 11 with Local Account OOBE Bypass</div>
+          </div>
+
+          <div class="bench-controls">
+            <button class="btn-bench highlight-bench" id="btn-ventoy-boot">Simulate Target Boot</button>
+            <button class="btn-bench" id="btn-ventoy-mok">Enroll MOK Key</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Retro Audio Soundboard -->
+    <section class="soundboard-section">
+      <div class="section-badge-glitch">/// VINTAGE HARDWARE SYNTH SOUNDBOARD</div>
+      <p class="section-desc">Web Audio API synthesized real-time computing chimes and diagnostics harmonics (Zero audio files).</p>
+
+      <div class="soundboard-grid">
+        <button class="snd-pad" data-sound="ps3-chime">
+          <span class="snd-icon">🎮</span>
+          <span class="snd-name">PS3 Startup Chime</span>
+        </button>
+        <button class="snd-pad" data-sound="dialup">
+          <span class="snd-icon">📠</span>
+          <span class="snd-name">56k Dial-Up Handshake</span>
+        </button>
+        <button class="snd-pad" data-sound="ventoy-boot">
+          <span class="snd-icon">💾</span>
+          <span class="snd-name">Ventoy BIOS Beep</span>
+        </button>
+        <button class="snd-pad" data-sound="nvg-activate">
+          <span class="snd-icon">🥽</span>
+          <span class="snd-name">NVG High-Pitch Coil</span>
+        </button>
+        <button class="snd-pad" data-sound="geiger">
+          <span class="snd-icon">☢️</span>
+          <span class="snd-name">Geiger Radiation Click</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Incident Field Logs / Case Files -->
+    <section class="case-files-section" id="case-files">
+      <div class="section-badge-glitch">/// FIELD INCIDENT LOGS & RECOVERIES</div>
+
+      <div class="files-grid">
+        
+        <!-- Case 01 -->
+        <article class="file-dossier-card" data-incident="optane" data-category="hardware">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-header">
+            <span class="case-id">INCIDENT #01</span>
+            <span class="case-type">STORAGE ANOMALY</span>
+          </div>
+          <h3 class="case-title">Intel Optane H20 BIOS Binding Failure</h3>
+          <div class="case-body">
+            A 512GB internal solid-state unit reported an anomalous 2TB GPT-protected partition state. Root cause identified as corrupted Intel Optane hybrid metadata binding inside BIOS parameters. Successfully purged invalid descriptors and restored partition integrity.
+          </div>
+          <div class="uv-secret uv-badge">
+            ⚡ [UV TRACE] Storage Sectors Normalized: 512GB Verified
+          </div>
+          <div class="file-footer">
+            <span class="tag">OPTANE-H20</span>
+            <span class="tag">GPT-REPAIR</span>
+            <span class="tag">BIOS-METADATA</span>
+            <button class="mini-inspect-btn" data-inspect="optane">Inspect Log &gt;</button>
+          </div>
+        </article>
+
+        <!-- Case 02 -->
+        <article class="file-dossier-card" data-incident="monterey" data-category="os-recovery">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-header">
+            <span class="case-id">INCIDENT #02</span>
+            <span class="case-type">OS RECOVERY</span>
+          </div>
+          <h3 class="case-title">Operation Monterey // Certificate Bypass</h3>
+          <div class="case-body">
+            13-inch MacBook Pro lock-out triggered by expired Apple server security certificates. Leveraged Internet Recovery Terminal commands, cleared raw physical partitions, remapped international keyboard matrices, and successfully deployed macOS Monterey.
+          </div>
+          <div class="uv-secret uv-badge">
+            ⚡ [UV TRACE] Certificate Nullified & Diskutil Clean Executed
+          </div>
+          <div class="file-footer">
+            <span class="tag">MACOS-MONTEREY</span>
+            <span class="tag">TERMINAL-STRINGS</span>
+            <span class="tag">PARTITION-WIPE</span>
+            <button class="mini-inspect-btn" data-inspect="monterey">Inspect Log &gt;</button>
+          </div>
+        </article>
+
+        <!-- Case 03 -->
+        <article class="file-dossier-card" data-incident="router" data-category="networking">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-header">
+            <span class="case-id">INCIDENT #03</span>
+            <span class="case-type">NETWORK INTERCEPTION</span>
+          </div>
+          <h3 class="case-title">Subnet Ghost // TP-Link Archer Bridging</h3>
+          <div class="case-body">
+            Repurposed TP-Link Archer MR200 v1 into a high-throughput isolated wireless AP. Flashed firmware v1.0.5 locally over Ethernet, modified subnet gateway routes, and disabled rogue DHCP servers to bridge securely with primary Tenda infrastructure.
+          </div>
+          <div class="uv-secret uv-badge">
+            ⚡ [UV TRACE] Subnet Conflict Eliminated: 192.168.x.x Isolated
+          </div>
+          <div class="file-footer">
+            <span class="tag">TP-LINK-MR200</span>
+            <span class="tag">LAN-BRIDGING</span>
+            <span class="tag">DHCP-SUPPRESS</span>
+            <button class="mini-inspect-btn" data-inspect="router">Inspect Log &gt;</button>
+          </div>
+        </article>
+
+        <!-- Case 04 -->
+        <article class="file-dossier-card" data-incident="ps3" data-category="firmware">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-header">
+            <span class="case-id">INCIDENT #04</span>
+            <span class="case-type">HARDWARE MODIFICATION</span>
+          </div>
+          <h3 class="case-title">Silicon Breach // PS3 Slim CECH-2504B</h3>
+          <div class="case-body">
+            Complete architectural exploit of Sony PlayStation 3 Slim (date code 0D). Replaced mechanical drive with high-read SSD, flashed custom firmware parameters, and provisioned webMAN MOD for encrypted remote media streaming and homebrew diagnostics.
+          </div>
+          <div class="uv-secret uv-badge">
+            ⚡ [UV TRACE] CFW Loaded: webMAN MOD Remote Stream Online
+          </div>
+          <div class="file-footer">
+            <span class="tag">PS3-CFW</span>
+            <span class="tag">SSD-SWAP</span>
+            <span class="tag">WEBMAN-MOD</span>
+            <button class="mini-inspect-btn" data-inspect="ps3">Inspect Log &gt;</button>
+          </div>
+        </article>
+
+        <!-- Case 05 -->
+        <article class="file-dossier-card" data-incident="wasscely" data-category="web-systems">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-header">
+            <span class="case-id">INCIDENT #05</span>
+            <span class="case-type">SYSTEMS MIGRATION</span>
+          </div>
+          <h3 class="case-title">Platform Extraction // Wasscely Migration</h3>
+          <div class="case-body">
+            Re-engineered legacy WASSCE learning platform to "Wasscely". Resolved database name collisions, flushed server cache arrays, corrected inverted dark mode rendering rules, and provisioned brand assets.
+          </div>
+          <div class="uv-secret uv-badge">
+            ⚡ [UV TRACE] Cache Purged: 100% Platform Uptime Maintained
+          </div>
+          <div class="file-footer">
+            <span class="tag">WASSCELY</span>
+            <span class="tag">CACHE-PURGE</span>
+            <span class="tag">CMS-INFRA</span>
+            <button class="mini-inspect-btn" data-inspect="wasscely">Inspect Log &gt;</button>
+          </div>
+        </article>
+
+        <!-- Case 06 -->
+        <article class="file-dossier-card" data-incident="win11" data-category="deployment">
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-header">
+            <span class="case-id">INCIDENT #06</span>
+            <span class="case-type">WINDOWS OOBE EXPLOIT</span>
+          </div>
+          <h3 class="case-title">Zero-Constraint Windows 11 Deployment</h3>
+          <div class="case-body">
+            Engineered automated deployment pipeline utilizing Ventoy multiboot media, overriding forced Microsoft account requirements via OOBE registry modifications, and validating Machine Owner Key (MOK) cryptographic signatures.
+          </div>
+          <div class="uv-secret uv-badge">
+            ⚡ [UV TRACE] OOBE Bypassed: Local Account Verified
+          </div>
+          <div class="file-footer">
+            <span class="tag">VENTOY</span>
+            <span class="tag">OOBE-BYPASS</span>
+            <span class="tag">MOK-SECURITY</span>
+            <button class="mini-inspect-btn" data-inspect="win11">Inspect Log &gt;</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Operational Stations & Engagements -->
+    <section class="stations-section">
+      <div class="section-badge-glitch">/// ACTIVE STATIONS & OPERATIONAL HISTORY</div>
+      
+      <div class="stations-timeline">
+        <div class="station-entry">
+          <div class="station-marker"></div>
+          <div class="station-details">
+            <span class="station-time">ACTIVE ASSIGNMENT</span>
+            <h4>Maxim Nyansa IT Solutions</h4>
+            <p class="station-role">Website Administration & Version Control Specialist</p>
+          </div>
+        </div>
+
+        <div class="station-entry">
+          <div class="station-marker"></div>
+          <div class="station-details">
+            <span class="station-time">ONGOING SESSIONS</span>
+            <h4>Valley View University</h4>
+            <p class="station-role">IT Operations Student-Worker & B.Ed IT Scholar</p>
+          </div>
+        </div>
+
+        <div class="station-entry">
+          <div class="station-marker"></div>
+          <div class="station-details">
+            <span class="station-time">ACTIVE POST</span>
+            <h4>KEY WATCH GHANA</h4>
+            <p class="station-role">Online Systems Editor & CMS Overseer</p>
+          </div>
+        </div>
+
+        <div class="station-entry">
+          <div class="station-marker"></div>
+          <div class="station-details">
+            <span class="station-time">PAST OPERATION</span>
+            <h4>Maxinet Broadband</h4>
+            <p class="station-role">Broadband Infrastructure Technical Attachment</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Secure Communications Channel -->
+    <section class="comm-channel-section" id="comms">
+      <div class="section-badge-glitch">/// SECURE TRANSMISSION CHANNELS</div>
+
+      <div class="comm-grid">
+        <a href="mailto:kwameampomah111@gmail.com" class="comm-card">
+          <span class="comm-type">DIRECT MAIL</span>
+          <span class="comm-val">kwameampomah111@gmail.com</span>
+          <span class="comm-action">TRANSMIT &rarr;</span>
+        </a>
+
+        <a href="tel:0200121912" class="comm-card">
+          <span class="comm-type">VOICE / CELL</span>
+          <span class="comm-val">0200121912</span>
+          <span class="comm-action">DIAL &rarr;</span>
+        </a>
+
+        <a href="https://github.com/kwameampomah" target="_blank" rel="noopener noreferrer" class="comm-card">
+          <span class="comm-type">CODE REPOSITORY</span>
+          <span class="comm-val">github.com/kwameampomah</span>
+          <span class="comm-action">ACCESS &rarr;</span>
+        </a>
+
+        <a href="https://www.linkedin.com/in/kwame-ampomah-10175931b" target="_blank" rel="noopener noreferrer" class="comm-card">
+          <span class="comm-type">PROFESSIONAL NETWORK</span>
+          <span class="comm-val">linkedin.com/in/kwame-ampomah</span>
+          <span class="comm-action">CONNECT &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <footer class="mystery-footer">
+      <p>[ END OF CLASSIFIED RECORD // ALL SYSTEMS MONITORED ]</p>
+      <p class="footer-sub">Press <kbd>Space</kbd> or <kbd>U</kbd> for Spectrums &bull; Press <kbd>T</kbd> for Terminal &bull; <kbd>&uarr;&uarr;&darr;&darr;&larr;&rarr;&larr;&rarr;BA</kbd> for Matrix</p>
+    </footer>
+
+  </main>
+
+  <!-- Interactive Hacker Terminal Modal with Mini-Games -->
+  <div class="terminal-modal" id="terminal-modal">
+    <div class="terminal-modal-window">
+      <div class="term-modal-header">
+        <div class="term-modal-title">PROJECT_BLACKOUT_CLI // v5.0.0 [OPERATIVE CONSOLE]</div>
+        <div class="term-modal-actions">
+          <span class="term-header-tag">GAMES: hack, snake, optane-repair</span>
+          <button class="term-close-btn" id="term-close">&times;</button>
+        </div>
+      </div>
+      <div class="term-modal-output" id="term-output">
+        <div class="term-msg system">SECURE CONNECTION ESTABLISHED TO SUBJECT #81801.</div>
+        <div class="term-msg">Type <span class="glow-cyan">help</span> to view commands, or launch games: <span class="glow-cyan">hack</span>, <span class="glow-cyan">snake</span>, <span class="glow-cyan">optane-repair</span>.</div>
+      </div>
+      <form class="term-input-row" id="term-form">
+        <span class="term-user-prompt">kwame@blackout:~$</span>
+        <input type="text" id="term-input" autocomplete="off" spellcheck="false" placeholder="Enter command (e.g. 'help', 'hack', 'snake')..." />
+      </form>
+    </div>
+  </div>
+
+  <!-- Achievements / Detective Clearance Modal -->
+  <div class="terminal-modal" id="badges-modal">
+    <div class="terminal-modal-window badges-modal-window">
+      <div class="term-modal-header">
+        <div class="term-modal-title">OPERATIVE INVESTIGATION DOSSIER // BADGES & XP</div>
+        <button class="term-close-btn" id="badges-close">&times;</button>
+      </div>
+      <div class="badges-body">
+        <div class="badges-progress-wrap">
+          <div class="badges-lvl-display">
+            <span>CURRENT CLEARANCE: <strong id="modal-clearance-text" class="glow-cyan">LEVEL 1 [RECRUIT]</strong></span>
+            <span id="modal-xp-text" class="glow-amber">0 / 100 XP</span>
+          </div>
+          <div class="xp-bar-outer">
+            <div class="xp-bar-inner" id="modal-xp-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="badges-grid" id="badges-grid-container">
+          <!-- Dynamically filled with Badges -->
+        </div>
+
+        <div class="id-card-trigger-wrap" id="id-card-promo">
+          <p>👑 <em>Unlock all 7 badges to generate your Master Operative ID Card!</em></p>
+          <button class="btn-tactical btn-primary-tactical" id="open-id-card-btn" disabled>
+            VIEW CLASSIFIED OPERATIVE ID CARD (LOCKED)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Classified Master Operative ID Card Modal -->
+  <div class="terminal-modal" id="id-card-modal">
+    <div class="id-card-container">
+      <div class="id-card" id="physical-id-card">
+        <div class="id-card-hologram"></div>
+        <div class="id-card-header">
+          <div class="id-agency">SPECIAL RECONNAISSANCE &bull; IT DIVISION</div>
+          <div class="id-seal">CLASSIFIED</div>
+        </div>
+        <div class="id-card-body">
+          <div class="id-photo-box">
+            <div class="id-photo-reticle"></div>
+            <span class="id-photo-initials">KA</span>
+            <span class="id-photo-label">OPERATIVE #81801</span>
+          </div>
+          <div class="id-info">
+            <div class="id-field"><span class="l">NAME:</span> <strong class="v">KWAME AFRIYIE AMPOMAH</strong></div>
+            <div class="id-field"><span class="l">ALIAS:</span> <span class="v">MAYER</span></div>
+            <div class="id-field"><span class="l">CLEARANCE:</span> <span class="v glow-green">LEVEL-5 [MASTER OPERATIVE]</span></div>
+            <div class="id-field"><span class="l">STATION:</span> <span class="v">TAIFA, ACCRA, GHANA</span></div>
+            <div class="id-field"><span class="l">SPECIALTY:</span> <span class="v">FORENSICS &bull; WEB &bull; NETWORKING</span></div>
+            <div class="id-barcode">||| |||| | ||||| || |||||| |||| | |||</div>
+          </div>
+        </div>
+        <div class="id-card-footer">
+          <span>ISSUED: 2026</span>
+          <span>VALLEY VIEW UNIVERSITY OPS</span>
+          <span>STATUS: VERIFIED</span>
+        </div>
+      </div>
+      <div class="id-card-actions">
+        <button class="btn-tactical btn-primary-tactical" onclick="window.print()">PRINT / EXPORT DOSSIER</button>
+        <button class="btn-tactical btn-secondary-tactical" id="id-card-close">CLOSE DOSSIER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement Notification Toast -->
+  <div class="achievement-toast" id="achievement-toast">
+    <div class="ach-icon" id="ach-toast-icon">🏆</div>
+    <div class="ach-text">
+      <div class="ach-title">ACHIEVEMENT UNLOCKED!</div>
+      <div class="ach-desc" id="ach-toast-desc">Flashlight Pioneer: Took your first steps in the dark.</div>
+    </div>
+  </div>
+
+  <script src="fun-engine.js"></script>
+  <script src="minigames.js"></script>
+  <script src="mystery.js"></script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+/* ==========================================================================
+   FUN ENGINE: Shared Achievements, XP Tracker, Konami Party & Confetti
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Global Floating XP / Level HUD
+   -------------------------------------------------------------------------- */
+.mayer-xp-hud {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(15, 17, 26, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 120, 0.35);
+  border-radius: 30px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #f1f5f9;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.mayer-xp-hud:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 215, 120, 0.4);
+  border-color: #ffd778;
+}
+
+.xp-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+}
+
+.xp-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 100px;
+}
+
+.xp-text-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+.xp-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.xp-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #ffd778);
+  width: 0%;
+  transition: width 0.4s ease-out;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Achievement Toast Notification
+   -------------------------------------------------------------------------- */
+.achievement-toast-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.achievement-toast {
+  background: rgba(10, 12, 20, 0.95);
+  border: 2px solid #ffd778;
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 0 30px rgba(255, 215, 120, 0.4), 0 10px 25px rgba(0, 0, 0, 0.8);
+  transform: translateX(120%);
+  animation: slideInToast 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards, fadeOutToast 0.5s ease 4.5s forwards;
+  min-width: 280px;
+  max-width: 380px;
+}
+
+.achievement-icon {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 8px #ffd778);
+  animation: bouncePop 0.5s ease;
+}
+
+.achievement-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.achievement-tag {
+  font-size: 0.65rem;
+  font-family: monospace;
+  color: #f59e0b;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.achievement-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 2px 0;
+}
+
+.achievement-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.achievement-xp-gain {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #4ade80;
+  margin-top: 3px;
+  font-family: monospace;
+}
+
+@keyframes slideInToast {
+  to { transform: translateX(0); }
+}
+
+@keyframes fadeOutToast {
+  to { opacity: 0; transform: translateY(-20px); }
+}
+
+@keyframes bouncePop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* --------------------------------------------------------------------------
+   Konami Arcade Party Mode Overlay & Confetti Canvas
+   -------------------------------------------------------------------------- */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+body.konami-party-mode {
+  animation: rainbowBorder 4s infinite linear;
+}
+
+@keyframes rainbowBorder {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.party-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(0, 0, 0, 0.9);
+  border: 4px solid #ffd778;
+  border-radius: 20px;
+  padding: 30px 40px;
+  text-align: center;
+  z-index: 10001;
+  box-shadow: 0 0 80px rgba(255, 215, 120, 0.8);
+  animation: partyPop 3.5s ease forwards;
+  pointer-events: none;
+}
+
+.party-banner h1 {
+  font-size: 2.2rem;
+  color: #ffd778;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.party-banner p {
+  color: #38bdf8;
+  font-size: 1.1rem;
+  font-family: monospace;
+}
+
+@keyframes partyPop {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  15% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  25% { transform: translate(-50%, -50%) scale(1); }
+  85% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+}

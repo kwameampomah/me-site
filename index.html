@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kwame Afriyie Ampomah | IT Specialist & Systems Administrator</title>
+  <meta name="description" content="Personal portfolio of Kwame Afriyie Ampomah (Mayer) - IT Specialist, Web Systems Administrator, Hardware & Network Diagnostics Technician." />
+  <meta property="og:title" content="Kwame Afriyie Ampomah | Portfolio" />
+  <meta property="og:description" content="IT Specialist, Web Systems Administrator, Hardware & Network Diagnostics." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="fun-engine.css" />
+  <link rel="stylesheet" href="minigames.css" />
+</head>
+<body>
+  <!-- Background Glow & Grid Overlay -->
+  <div class="bg-glow"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Header Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-bracket">&lt;</span><span class="logo-name">Kwame.A</span><span class="logo-tag"> /&gt;</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#expertise" class="nav-link">Technical Domains</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#education" class="nav-link">Education</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="desktop.html" class="btn btn-sm btn-outline" style="border-color: #34d399; color: #34d399;" title="Launch Windows 95 / Sci-Fi Virtual Desktop">🖥️ Virtual Desktop</a>
+        <button class="btn btn-sm btn-outline" id="zerog-btn" style="border-color: #a855f7; color: #c084fc;" title="Activate Zero-G Physics Sandbox">🌌 Zero-G Mode</button>
+        <a href="adventure.html" class="btn btn-sm btn-outline" style="border-color: #ffd778; color: #ffd778;">🧭 Flashlight Adventure</a>
+        <a href="mystery.html" class="btn btn-sm btn-outline" style="border-color: #38bdf8; color: #38bdf8;">📁 Dossier Mode</a>
+        <a href="#contact" class="btn btn-sm btn-primary">Get in Touch</a>
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span>Available for IT & Systems Consulting</span>
+        </div>
+        <h1 class="hero-title">
+          Hi, I'm <span class="gradient-text">Kwame Afriyie Ampomah</span>
+        </h1>
+        <p class="hero-alias">Also known as <span class="alias-pill">Mayer</span></p>
+        <p class="hero-tagline">
+          Information Technology Specialist with deep hands-on expertise in <strong>Web Systems Administration</strong>, <strong>Hardware & Storage Diagnostics</strong>, <strong>Network Infrastructure</strong>, and <strong>Version Control</strong>.
+        </p>
+
+        <div class="hero-meta">
+          <div class="meta-item">
+            <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Taifa, Greater Accra Region, Ghana</span>
+          </div>
+          <div class="meta-item">
+            <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            <span>Valley View University &bull; B.Ed in IT</span>
+          </div>
+        </div>
+
+        <div class="hero-cta-group">
+          <a href="#expertise" class="btn btn-primary">Explore Technical Expertise</a>
+          <a href="https://github.com/kwameampomah" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/kwame-ampomah-10175931b" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-buttons">
+            <span class="btn-circle red"></span>
+            <span class="btn-circle yellow"></span>
+            <span class="btn-circle green"></span>
+          </div>
+          <div class="terminal-title">kwame@system:~</div>
+        </div>
+        <div class="terminal-body">
+          <p class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">whoami</span></p>
+          <p class="term-output">Kwame Afriyie Ampomah (Mayer)</p>
+          <p class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">sysinfo --modules</span></p>
+          <div class="term-sys-info">
+            <div><span class="term-key">ROLE:</span> Systems & Web Administrator</div>
+            <div><span class="term-key">ENV:</span> Windows / Linux / macOS Tools</div>
+            <div><span class="term-key">CORE:</span> Diagnostics &bull; Networking &bull; Version Control</div>
+            <div><span class="term-key">STACK:</span> Python &bull; WordPress &bull; Git &bull; CLI Tools</div>
+            <div><span class="term-key">LOCATION:</span> Taifa, Accra (GH)</div>
+            <div><span class="term-key">STATUS:</span> Active &bull; Ready to Deploy</div>
+          </div>
+          <p class="term-line"><span class="term-prompt">$</span> <span class="term-cursor">_</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section about-section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">About Me</h2>
+        <div class="section-line"></div>
+        <p class="section-subtitle">Bridging practical IT infrastructure, storage diagnostics, and system resilience.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="card-icon-wrapper">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
+          <h3>System & Web Administration</h3>
+          <p>
+            Experienced in managing enterprise web instances, coordinating platform migrations (such as Wasscely), streamlining version control workflows in Git, and resolving intricate server-side caching arrays and role permissions.
+          </p>
+        </div>
+
+        <div class="about-card">
+          <div class="card-icon-wrapper">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          </div>
+          <h3>Hardware & OS Diagnostics</h3>
+          <p>
+            Proven record in deep-level hardware troubleshooting, BIOS and hybrid storage metadata recovery (Intel Optane H20), EFI/MOK certificates, multiboot environments (Ventoy), and low-level firmware optimizations.
+          </p>
+        </div>
+
+        <div class="about-card">
+          <div class="card-icon-wrapper">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <h3>Networking & Routing</h3>
+          <p>
+            Skilled in local subnet segmentation, wireless access point deployment (LAN-to-LAN bridging), DHCP management, firmware flashing over Ethernet, and evaluating enterprise dedicated bandwidth solutions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Expertise Section -->
+  <section class="section expertise-section" id="expertise">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Technical Expertise & Case Studies</h2>
+        <div class="section-line"></div>
+        <p class="section-subtitle">Real-world technical troubleshooting, recovery operations, and network deployments.</p>
+      </div>
+
+      <!-- Domain Tabs -->
+      <div class="tabs-container">
+        <div class="tabs-list" role="tablist">
+          <button class="tab-btn active" data-tab="hardware">Hardware & OS Recovery</button>
+          <button class="tab-btn" data-tab="networking">Networking & Infrastructure</button>
+          <button class="tab-btn" data-tab="web-systems">Web Systems & CMS</button>
+          <button class="tab-btn" data-tab="tooling">Programming & Tools</button>
+        </div>
+
+        <div class="tab-panels">
+          <!-- Hardware Tab -->
+          <div class="tab-panel active" id="tab-hardware">
+            <div class="case-studies-grid">
+              <div class="case-card">
+                <div class="case-badge">Storage Diagnostics</div>
+                <h4>Intel Optane H20 Hybrid Storage Recovery</h4>
+                <p>
+                  Diagnosed and corrected an issue where a 512GB internal SSD was misidentified as an erroneous 2TB GPT-protected partition due to invalid Optane metadata binding within the system BIOS.
+                </p>
+                <div class="case-tags">
+                  <span>Intel Optane</span>
+                  <span>GPT Partitions</span>
+                  <span>BIOS Metadata</span>
+                  <span>Diskpart</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-badge">OS Deployment</div>
+                <h4>Windows 11 Customization & OOBE Bypasses</h4>
+                <p>
+                  Bypassed restrictive hardware constraints and forced online account requirements using Ventoy multiboot environments, local OOBE registry modifications, and Machine Owner Key (MOK) enrollment verification.
+                </p>
+                <div class="case-tags">
+                  <span>Windows 11</span>
+                  <span>Ventoy</span>
+                  <span>Registry Tweaks</span>
+                  <span>MOK Certificates</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-badge">macOS Recovery</div>
+                <h4>MacBook Pro Recovery & Certificate Bypass</h4>
+                <p>
+                  Overcame expired server security certificates on an Intel-based 13-inch MacBook Pro by entering Internet Recovery, wiping disk partitions through Terminal strings, remapping international layouts, and deploying macOS Monterey.
+                </p>
+                <div class="case-tags">
+                  <span>macOS Monterey</span>
+                  <span>Terminal</span>
+                  <span>Diskutil</span>
+                  <span>Security Certificates</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-badge">Firmware & Modding</div>
+                <h4>PlayStation 3 Hardware Upgrade & CFW</h4>
+                <p>
+                  Jailbroke a PS3 Slim (CECH-2504B, date code 0D). Upgraded internal mechanical storage to a high-speed SSD and configured custom firmware with webMAN MOD for remote streaming and homebrew execution.
+                </p>
+                <div class="case-tags">
+                  <span>Custom Firmware</span>
+                  <span>SSD Upgrade</span>
+                  <span>webMAN MOD</span>
+                  <span>Thermal Optimization</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Networking Tab -->
+          <div class="tab-panel" id="tab-networking">
+            <div class="case-studies-grid">
+              <div class="case-card">
+                <div class="case-badge">Access Point Bridging</div>
+                <h4>TP-Link Archer MR200 AP Configuration</h4>
+                <p>
+                  Configured a TP-Link Archer MR200 v1 as a dedicated secondary wireless access point linked via LAN-to-LAN Ethernet to a primary Tenda router. Successfully flashed firmware v1.0.5 locally, reconfigured IP subnet routing, and disabled local DHCP conflicts.
+                </p>
+                <div class="case-tags">
+                  <span>TP-Link Archer MR200</span>
+                  <span>LAN-to-LAN</span>
+                  <span>Subnet Routing</span>
+                  <span>DHCP Disable</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-badge">Infrastructure Evaluation</div>
+                <h4>Dedicated Leased Link Evaluation</h4>
+                <p>
+                  Analyzed technical network parameters, SLAs, and service infrastructure quotes for a 200Mbps dedicated internet link from iKlick to ensure optimal throughput and low latency.
+                </p>
+                <div class="case-tags">
+                  <span>Bandwidth SLA</span>
+                  <span>iKlick</span>
+                  <span>Routing Analysis</span>
+                  <span>Throughput Testing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Web Systems Tab -->
+          <div class="tab-panel" id="tab-web-systems">
+            <div class="case-studies-grid">
+              <div class="case-card">
+                <div class="case-badge">Platform Migration</div>
+                <h4>Wasscely Educational Platform Migration</h4>
+                <p>
+                  Executed the rebranding and full migration of the WASSCE student learning platform to "Wasscely". Resolved core administrative naming conflicts, purged server-side cache layers, corrected dark mode CSS color inversions, and embedded brand assets.
+                </p>
+                <div class="case-tags">
+                  <span>Wasscely</span>
+                  <span>Platform Migration</span>
+                  <span>Cache Purging</span>
+                  <span>Asset Integration</span>
+                </div>
+              </div>
+
+              <div class="case-card">
+                <div class="case-badge">Content Management & Editorial</div>
+                <h4>KEY WATCH GHANA & WordPress Administration</h4>
+                <p>
+                  Actively manage and edit the KEY WATCH GHANA online publication, maintaining site uptime, role permission hierarchies, plugin security updates, and performance caching arrays.
+                </p>
+                <div class="case-tags">
+                  <span>WordPress</span>
+                  <span>Elementor</span>
+                  <span>Editorial Management</span>
+                  <span>Role Hierarchies</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tooling Tab -->
+          <div class="tab-panel" id="tab-tooling">
+            <div class="tooling-grid">
+              <div class="tool-item">
+                <div class="tool-name">Python</div>
+                <div class="tool-desc">Scripting, automation, and algorithmic problem-solving.</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name">Git & Version Control</div>
+                <div class="tool-desc">Branching models, commits, repository maintenance.</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name">PyCharm & VS Code</div>
+                <div class="tool-desc">Primary IDE environments with linting and debugging.</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name">Flowgorithm</div>
+                <div class="tool-desc">Algorithm design, computational logic mapping.</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name">Ventoy & CLI Recovery</div>
+                <div class="tool-desc">Multiboot deployment, Diskpart, shell diagnostics.</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name">Ninite & Offline Deployers</div>
+                <div class="tool-desc">Automated bulk installations and registry cleanup.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience & Education Section -->
+  <section class="section timeline-section" id="experience">
+    <div class="container">
+      <div class="timeline-wrapper">
+        <!-- Experience Column -->
+        <div class="timeline-column">
+          <div class="section-header align-left">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="section-line"></div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-date">Current</span>
+                <h3 class="timeline-role">Website Administration & Version Control Intern</h3>
+                <h4 class="timeline-company">Maxim Nyansa IT Solutions</h4>
+                <p>
+                  Focusing on website administration, content infrastructure maintenance, and software version control using Git workflows.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-date">Ongoing (Academic Terms)</span>
+                <h3 class="timeline-role">Student-Worker</h3>
+                <h4 class="timeline-company">Valley View University</h4>
+                <p>
+                  Assisting with campus IT operations, hardware verification, and technical support duties during official school sessions.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-date">Active</span>
+                <h3 class="timeline-role">Online Editor</h3>
+                <h4 class="timeline-company">KEY WATCH GHANA</h4>
+                <p>
+                  Overseeing publication integrity, editorial workflows, and WordPress content management systems.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <span class="timeline-date">Completed</span>
+                <h3 class="timeline-role">Technical Attachment</h3>
+                <h4 class="timeline-company">Maxinet Broadband</h4>
+                <p>
+                  Gained practical exposure to broadband networking, infrastructure routing, and customer endpoint configurations.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education Column -->
+        <div class="timeline-column" id="education">
+          <div class="section-header align-left">
+            <h2 class="section-title">Education & Academic Record</h2>
+            <div class="section-line"></div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot accent"></div>
+              <div class="timeline-content">
+                <span class="timeline-date">In Progress</span>
+                <h3 class="timeline-role">Bachelor of Education in Information Technology</h3>
+                <h4 class="timeline-company">Valley View University</h4>
+                <p>
+                  Comprehensive study combining core information technology disciplines, system administration, computing pedagogy, and practical lab applications.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot accent"></div>
+              <div class="timeline-content">
+                <span class="timeline-date">January 2025</span>
+                <h3 class="timeline-role">Academic Admission Offer</h3>
+                <h4 class="timeline-company">Ghana Communication Technology University (GCTU)</h4>
+                <p>
+                  Offered admission for tertiary computing & technology studies.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section contact-section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="section-line"></div>
+        <p class="section-subtitle">Interested in collaborating or discussing systems, networking, and IT infrastructure?</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </div>
+          <h4>Email</h4>
+          <p class="contact-value" id="email-text">kwameampomah111@gmail.com</p>
+          <div class="contact-actions">
+            <a href="mailto:kwameampomah111@gmail.com" class="btn btn-xs btn-primary">Send Email</a>
+            <button class="btn btn-xs btn-outline copy-btn" data-copy="kwameampomah111@gmail.com">Copy</button>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <h4>Phone</h4>
+          <p class="contact-value" id="phone-text">0200121912</p>
+          <div class="contact-actions">
+            <a href="tel:0200121912" class="btn btn-xs btn-primary">Call</a>
+            <button class="btn btn-xs btn-outline copy-btn" data-copy="0200121912">Copy</button>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon-box">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </div>
+          <h4>GitHub</h4>
+          <p class="contact-value">github.com/kwameampomah</p>
+          <div class="contact-actions">
+            <a href="https://github.com/kwameampomah" target="_blank" rel="noopener noreferrer" class="btn btn-xs btn-primary">Visit Profile</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon-box">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </div>
+          <h4>LinkedIn</h4>
+          <p class="contact-value">linkedin.com/in/kwame-ampomah</p>
+          <div class="contact-actions">
+            <a href="https://www.linkedin.com/in/kwame-ampomah-10175931b" target="_blank" rel="noopener noreferrer" class="btn btn-xs btn-primary">Connect</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A06-Bot Cyber Companion Widget -->
+  <div class="a06-bot-widget" id="a06-bot" title="Click me for IT wisdom & hints!">
+    <div class="a06-speech-bubble" id="a06-speech">BEEP BOOP! I am A06-Droid. Try pressing ↑↑↓↓←→←→BA or turning off Gravity!</div>
+    <div class="a06-bot-avatar">🤖</div>
+  </div>
+
+  <!-- Zero-G Restore Float HUD -->
+  <div class="zerog-hud" id="zerog-hud">
+    <span>🌌 ZERO-G ACTIVE (DRAG CARDS TO TOSS!)</span>
+    <button class="btn btn-sm btn-primary" id="restore-gravity-btn">⚡ RESTORE GRAVITY</button>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <p>&copy; 2026 Kwame Afriyie Ampomah (Mayer). All rights reserved.</p>
+      <p class="footer-note">Taifa, Greater Accra Region, Ghana</p>
+    </div>
+  </footer>
+
+  <script src="fun-engine.js"></script>
+  <script src="minigames.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

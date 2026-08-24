@@ -1,0 +1,1262 @@
+/* ==========================================================================
+   THE EXPEDITION: Dynamic Flashlight Mask, Atmosphere & Ancient Vault Styles
+   ========================================================================== */
+
+:root {
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+  
+  /* Flashlight Beam Defaults (Explorer's Torch) */
+  --beam-radius: 260px;
+  --beam-outer: 380px;
+  --beam-color: rgba(255, 215, 120, 0.16);
+  --beam-ambient: #030305;
+  --glow-color: rgba(255, 180, 50, 0.6);
+  --rune-color: #ffd778;
+  
+  /* Fonts */
+  --font-serif: 'Cinzel', serif;
+  --font-heading: 'Cinzel Decorative', cursive;
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-mono: 'VT323', monospace;
+}
+
+/* Light Modes */
+body.beam-torch {
+  --beam-radius: 260px;
+  --beam-outer: 390px;
+  --beam-color: rgba(255, 215, 120, 0.16);
+  --glow-color: rgba(255, 180, 50, 0.7);
+  --rune-color: #ffd778;
+}
+
+body.beam-uv {
+  --beam-radius: 280px;
+  --beam-outer: 410px;
+  --beam-color: rgba(140, 60, 255, 0.22);
+  --glow-color: rgba(180, 70, 255, 0.85);
+  --rune-color: #00ffcc;
+}
+
+body.beam-lantern {
+  --beam-radius: 380px;
+  --beam-outer: 560px;
+  --beam-color: rgba(255, 235, 160, 0.13);
+  --glow-color: rgba(255, 210, 100, 0.5);
+  --rune-color: #ffe699;
+}
+
+body.beam-matrix {
+  --beam-radius: 290px;
+  --beam-outer: 430px;
+  --beam-color: rgba(34, 197, 94, 0.2);
+  --glow-color: rgba(74, 222, 128, 0.8);
+  --rune-color: #4ade80;
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--beam-ambient);
+  color: #d1d5db;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  position: relative;
+  cursor: crosshair;
+}
+
+/* --------------------------------------------------------------------------
+   Flashlight Masking Engine
+   -------------------------------------------------------------------------- */
+.darkness-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+  background: radial-gradient(
+    circle var(--beam-outer) at var(--mouse-x) var(--mouse-y),
+    transparent 0%,
+    transparent var(--beam-radius),
+    rgba(2, 2, 4, 0.88) calc(var(--beam-radius) + 70px),
+    rgba(2, 2, 3, 0.99) var(--beam-outer),
+    #010102 100%
+  );
+  transition: background 0.2s ease-out;
+}
+
+/* Subtle Dust Particle & Cobweb Canvas */
+#particles-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 45;
+}
+
+#cobweb-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 44;
+}
+
+/* Darting Shadow Phantom */
+.phantom-shadow {
+  position: fixed;
+  font-size: 2.8rem;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+  filter: blur(4px) drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+  transition: opacity 0.5s ease-out, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.phantom-shadow.darting {
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   Adventure Top HUD
+   -------------------------------------------------------------------------- */
+.adventure-hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  background: rgba(10, 10, 15, 0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 120, 0.15);
+  z-index: 100;
+}
+
+.hud-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.expedition-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #ffd778;
+  letter-spacing: 0.08em;
+}
+
+.pulse-amber {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.hud-chamber-name {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: #94a3b8;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding-left: 1rem;
+  letter-spacing: 0.05em;
+}
+
+/* Center Lens Switcher & Battery */
+.hud-center {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lens-switcher {
+  display: flex;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 215, 120, 0.2);
+}
+
+.lens-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lens-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lens-btn.active {
+  background: rgba(255, 215, 120, 0.2);
+  color: #ffd778;
+  border: 1px solid rgba(255, 215, 120, 0.4);
+  box-shadow: 0 0 12px rgba(255, 215, 120, 0.2);
+}
+
+body.beam-uv .lens-btn.active#lens-uv {
+  background: rgba(168, 85, 247, 0.25);
+  color: #d8b4fe;
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+body.beam-matrix .lens-btn.active#lens-matrix {
+  background: rgba(34, 197, 94, 0.25);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+/* Battery & Dynamo Meter */
+.battery-meter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.battery-icon {
+  color: #f59e0b;
+}
+
+.battery-bar {
+  width: 50px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.battery-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #f59e0b, #4ade80);
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.crank-btn {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid #f59e0b;
+  color: #ffd778;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.crank-btn:hover {
+  background: #f59e0b;
+  color: #000;
+  transform: scale(1.05);
+}
+
+/* Right HUD buttons */
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.hud-action-btn, .hud-link-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.arcade-glow-btn {
+  border-color: #ec4899 !important;
+  color: #f472b6 !important;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+}
+
+.arcade-glow-btn:hover {
+  background: rgba(236, 72, 153, 0.2) !important;
+  box-shadow: 0 0 18px rgba(236, 72, 153, 0.6) !important;
+}
+
+.hud-action-btn:hover, .hud-link-btn:hover {
+  background: rgba(255, 215, 120, 0.15);
+  border-color: #ffd778;
+  color: #ffd778;
+}
+
+.hud-nav-dropdown {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Adventure World & Chamber Sections
+   -------------------------------------------------------------------------- */
+.adventure-world {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(20, 20, 30, 0.4) 0%, #030305 100%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+  overflow: hidden;
+}
+
+.chamber-section {
+  display: none;
+  min-height: 80vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  animation: chamberFadeIn 0.5s ease-out;
+}
+
+.chamber-section.active-chamber {
+  display: block;
+}
+
+@keyframes chamberFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ambient Wall Markings & Chalk Arrows */
+.ambient-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chalk-arrow {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
+.chalk-svg {
+  width: 70px;
+  height: 28px;
+  stroke: rgba(255, 255, 255, 0.55);
+}
+
+.pos-arrow-1 { top: 25%; left: 8%; transform: rotate(-5deg); }
+.pos-arrow-2 { top: 60%; right: 10%; transform: rotate(10deg); color: #00ffcc; }
+.pos-arrow-3 { bottom: 15%; left: 45%; }
+
+.ancient-graffiti {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.1em;
+}
+
+.pos-graffiti-1 { top: 18%; right: 12%; color: #c084fc; font-weight: bold; }
+.pos-graffiti-2 { bottom: 25%; left: 12%; }
+
+/* Spectral Only */
+.spectral-only {
+  opacity: 0.05;
+  transition: opacity 0.3s, filter 0.3s;
+}
+
+body.beam-uv .spectral-only {
+  opacity: 1 !important;
+  color: #00ffcc !important;
+  filter: drop-shadow(0 0 8px #00ffcc);
+}
+
+/* --------------------------------------------------------------------------
+   Monolith & Inscriptions
+   -------------------------------------------------------------------------- */
+.monolith-inscription {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2.5rem 1.5rem;
+  background: radial-gradient(circle, rgba(255, 215, 120, 0.03) 0%, transparent 70%);
+  border-bottom: 1px solid rgba(255, 215, 120, 0.1);
+}
+
+.ancient-title {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  letter-spacing: 0.15em;
+  color: #ffd778;
+  text-shadow: 0 0 18px rgba(255, 215, 120, 0.4);
+  margin-bottom: 0.8rem;
+}
+
+.ancient-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: #e2e8f0;
+  max-width: 700px;
+  margin: 0 auto 0.8rem;
+  line-height: 1.6;
+}
+
+.ancient-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+}
+
+/* Chamber Lore Header */
+.chamber-header-lore {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.lore-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #f59e0b;
+  letter-spacing: 0.15em;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.chamber-header-lore h2 {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  color: #f8fafc;
+  margin-bottom: 0.5rem;
+}
+
+.chamber-header-lore p {
+  color: #94a3b8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Mini-Game Portal in Chambers
+   -------------------------------------------------------------------------- */
+.minigame-portal {
+  max-width: 460px;
+  margin: 2rem auto;
+  padding: 1.2rem 1.8rem;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(59, 130, 246, 0.15));
+  border: 2px dashed #ec4899;
+  border-radius: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.2);
+}
+
+.minigame-portal:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: #f472b6;
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(59, 130, 246, 0.25));
+}
+
+.portal-icon {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+}
+
+.portal-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f472b6;
+  letter-spacing: 0.05em;
+}
+
+.portal-sub {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  font-family: monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Wall Sconces
+   -------------------------------------------------------------------------- */
+.wall-sconce {
+  position: absolute;
+  width: 60px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.sconce-1 { top: 38%; left: 6%; }
+.sconce-2 { top: 38%; right: 6%; }
+.sconce-3 { top: 45%; left: 8%; }
+
+.sconce-torch {
+  font-size: 2rem;
+  filter: grayscale(100%) opacity(0.3);
+  transition: filter 0.4s, transform 0.3s;
+}
+
+.wall-sconce.ignited .sconce-torch {
+  filter: grayscale(0%) opacity(1) drop-shadow(0 0 15px #f59e0b);
+  transform: scale(1.2);
+  animation: torchFlicker 1.5s infinite alternate;
+}
+
+.sconce-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.wall-sconce.ignited .sconce-label {
+  color: #f59e0b;
+}
+
+@keyframes torchFlicker {
+  0% { transform: scale(1.18) rotate(-1deg); }
+  50% { transform: scale(1.24) rotate(1deg); }
+  100% { transform: scale(1.2) rotate(0deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Relic Discoveries
+   -------------------------------------------------------------------------- */
+.relic-item {
+  position: relative;
+  width: 280px;
+  padding: 1.5rem;
+  background: rgba(15, 15, 25, 0.7);
+  border: 1px solid rgba(255, 215, 120, 0.2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.relic-item:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: #ffd778;
+  box-shadow: 0 0 25px rgba(255, 215, 120, 0.4);
+}
+
+.relic-item.claimed {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(20, 35, 25, 0.6);
+}
+
+.relic-item.claimed .relic-name {
+  color: #4ade80;
+}
+
+.relic-icon-wrapper {
+  position: relative;
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
+}
+
+.relic-sparkles {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1.2rem;
+  animation: sparkleRotate 3s infinite linear;
+}
+
+.relic-label-plate {
+  text-align: center;
+}
+
+.relic-name {
+  display: block;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffd778;
+  margin-bottom: 4px;
+}
+
+.relic-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.pos-relic-1 { margin: 2rem auto; }
+.pos-relic-2 { margin: 1.5rem auto 1.5rem calc(50% - 320px); }
+.pos-relic-3 { margin: 1.5rem auto 1.5rem calc(50% + 40px); }
+.pos-relic-4 { margin: 1.5rem auto 1.5rem calc(50% - 320px); }
+.pos-relic-5 { margin: 1.5rem auto 1.5rem calc(50% + 40px); }
+
+@media (max-width: 768px) {
+  .pos-relic-2, .pos-relic-3, .pos-relic-4, .pos-relic-5 {
+    margin: 1.5rem auto;
+  }
+}
+
+/* Ancient Chest */
+.ancient-chest {
+  max-width: 320px;
+  margin: 2rem auto;
+  padding: 1.2rem;
+  background: rgba(20, 15, 10, 0.7);
+  border: 1px dashed rgba(245, 158, 11, 0.4);
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ancient-chest:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  transform: translateY(-3px);
+}
+
+.chest-box {
+  font-size: 2.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.chest-label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #fbbf24;
+}
+
+/* UV Spectral Sigil */
+.uv-rune-sigil {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: rgba(30, 10, 50, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 12px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.sigil-glow {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.sigil-text code {
+  background: rgba(0, 0, 0, 0.5);
+  color: #38bdf8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Chamber Gateways & Navigation
+   -------------------------------------------------------------------------- */
+.chamber-gateway, .chamber-nav-btn {
+  margin: 3rem auto 1rem;
+  max-width: 440px;
+  padding: 1rem 1.8rem;
+  background: linear-gradient(135deg, rgba(255, 215, 120, 0.08), rgba(255, 215, 120, 0.02));
+  border: 1px solid rgba(255, 215, 120, 0.3);
+  border-radius: 30px;
+  color: #ffd778;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+}
+
+.chamber-gateway:hover, .chamber-nav-btn:hover {
+  background: rgba(255, 215, 120, 0.2);
+  border-color: #ffd778;
+  box-shadow: 0 0 25px rgba(255, 215, 120, 0.35);
+  transform: translateY(-2px);
+}
+
+.chamber-nav-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.chamber-nav-btn {
+  margin: 0;
+  min-width: 260px;
+}
+
+/* --------------------------------------------------------------------------
+   Chamber 3: The Grand Vault Altar
+   -------------------------------------------------------------------------- */
+.vault-monolith {
+  max-width: 650px;
+  margin: 3rem auto;
+  padding: 2.5rem 2rem;
+  background: radial-gradient(circle, rgba(20, 20, 35, 0.9) 0%, rgba(10, 10, 15, 0.95) 100%);
+  border: 2px solid rgba(255, 215, 120, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 215, 120, 0.05);
+  text-align: center;
+}
+
+.arch-runes {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: #ffd778;
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+}
+
+.altar-sockets {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.socket {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  filter: grayscale(100%) opacity(0.3);
+  transition: all 0.4s;
+}
+
+.socket.active-socket {
+  filter: grayscale(0%) opacity(1);
+  border-style: solid;
+  border-color: #ffd778;
+  background: rgba(255, 215, 120, 0.15);
+  box-shadow: 0 0 20px rgba(255, 215, 120, 0.5);
+  animation: socketPulse 2s infinite alternate;
+}
+
+@keyframes socketPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.unlock-vault-btn {
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #64748b;
+  cursor: not-allowed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s;
+}
+
+.unlock-vault-btn:not([disabled]) {
+  cursor: pointer;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #ffd778;
+  color: #000;
+  font-weight: 800;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.unlock-vault-btn .btn-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.unlock-vault-btn .btn-sub {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* --------------------------------------------------------------------------
+   Modals & Parchment Journal
+   -------------------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #e2e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.6);
+  color: #fff;
+}
+
+/* Relic Inspect Card */
+.relic-inspect-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: #0f121d;
+  border: 2px solid rgba(255, 215, 120, 0.4);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.inspect-glow {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 215, 120, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.inspect-icon-large {
+  font-size: 4rem;
+  margin-bottom: 0.6rem;
+}
+
+.inspect-category {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #f59e0b;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.inspect-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: #f8fafc;
+  margin-bottom: 1rem;
+}
+
+.inspect-divider {
+  width: 60px;
+  height: 2px;
+  background: #ffd778;
+  margin: 0 auto 1.2rem;
+}
+
+.inspect-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+}
+
+.inspect-technical-box {
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 3px solid #38bdf8;
+  padding: 1rem;
+  text-align: left;
+  border-radius: 4px;
+  margin-bottom: 1.8rem;
+  font-size: 0.85rem;
+}
+
+.inspect-technical-box strong {
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.claim-relic-btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: none;
+  color: #000;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  transition: all 0.2s;
+}
+
+.claim-relic-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.7);
+}
+
+/* Expedition Journal (Parchment Styled) */
+.journal-parchment {
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  background: #141724;
+  border: 2px solid rgba(255, 215, 120, 0.3);
+  border-radius: 16px;
+  padding: 2.2rem;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 215, 120, 0.2);
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.journal-title-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.journal-seal {
+  font-size: 2.4rem;
+}
+
+.journal-title-box h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: #ffd778;
+}
+
+.journal-sub {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.journal-content-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .journal-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.journal-relic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.journal-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.journal-entry.unlocked {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(20, 40, 30, 0.4);
+}
+
+.journal-entry.unlocked .entry-status {
+  color: #4ade80;
+}
+
+.entry-status {
+  font-size: 1.2rem;
+}
+
+.entry-info strong {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: #f8fafc;
+  display: block;
+}
+
+.entry-info p {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.journal-clue-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 215, 120, 0.2);
+  padding: 1.2rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 1rem 0 1.5rem;
+  color: #cbd5e1;
+}
+
+.journal-clue-box p {
+  margin-bottom: 0.8rem;
+}
+
+.quick-links-box h4 {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #f59e0b;
+  margin-bottom: 0.5rem;
+}
+
+.quick-links-box ul {
+  list-style: none;
+  font-size: 0.85rem;
+}
+
+.quick-links-box a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.quick-links-box a:hover {
+  text-decoration: underline;
+}
+
+/* Victory Sanctum Card */
+.victory-sanctum-card {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  background: #090c16;
+  border: 2px solid #ffd778;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 0 80px rgba(245, 158, 11, 0.4);
+}
+
+.victory-badge {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: #ffd778;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.victory-header h1 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.victory-alias {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+.victory-lore {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.victory-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .victory-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.v-stat {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 215, 120, 0.2);
+  border-radius: 8px;
+  padding: 1rem 0.5rem;
+}
+
+.v-num {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffd778;
+  margin-bottom: 4px;
+}
+
+.v-lab {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.victory-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.v-btn {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v-btn.primary-glow {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
+}
+
+.v-btn.secondary-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e2e8f0;
+}
+
+.v-btn.close-v-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 215, 120, 0.3);
+  color: #ffd778;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes sparkleRotate {
+  0% { transform: rotate(0deg) scale(0.9); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(0.9); }
+}

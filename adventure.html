@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE EXPEDITION // Vault of the Digital Archon</title>
+  <meta name="description" content="An interactive flashlight adventure and scavenger hunt in the dark. Search for hidden relics, decode secret runes, and unlock the lost vault." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700&family=Space+Grotesk:wght@400;500;700&family=VT323&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="adventure.css" />
+  <link rel="stylesheet" href="fun-engine.css" />
+  <link rel="stylesheet" href="minigames.css" />
+</head>
+<body class="beam-torch">
+  <!-- Flashlight Darkness Mask, Cobweb Canvas & Particle Canvas -->
+  <div class="darkness-overlay" id="darkness-mask"></div>
+  <canvas id="cobweb-canvas"></canvas>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Phantom Shadow Entity -->
+  <div class="phantom-shadow" id="phantom-shadow">👻</div>
+
+  <!-- Top Adventure HUD -->
+  <header class="adventure-hud">
+    <div class="hud-left">
+      <div class="expedition-badge">
+        <span class="pulse-amber"></span>
+        <span class="hud-text-bold">EXPEDITION: VAULT 81801</span>
+      </div>
+      <div class="hud-chamber-name" id="chamber-indicator">
+        CHAMBER I: THE FORGOTTEN VESTIBULE
+      </div>
+    </div>
+
+    <!-- Center Torch Beam Controls & Battery Meter -->
+    <div class="hud-center">
+      <div class="lens-switcher">
+        <button class="lens-btn active" id="lens-torch" title="Explorer's Torch (Press 1)">
+          <span class="lens-icon">🔥</span>
+          <span class="lens-label">TORCH</span>
+        </button>
+        <button class="lens-btn" id="lens-uv" title="Spectral UV Lens (Press 2)">
+          <span class="lens-icon">👁️</span>
+          <span class="lens-label">SPECTRAL UV</span>
+        </button>
+        <button class="lens-btn" id="lens-lantern" title="Wide Lantern (Press 3)">
+          <span class="lens-icon">🏮</span>
+          <span class="lens-label">LANTERN</span>
+        </button>
+        <button class="lens-btn" id="lens-matrix" title="Matrix Code Beam (Unlock at Lvl 2)">
+          <span class="lens-icon">💻</span>
+          <span class="lens-label">MATRIX</span>
+        </button>
+      </div>
+
+      <!-- Battery & Dynamo Crank Indicator -->
+      <div class="battery-meter" id="battery-meter" title="Flashlight Battery. Press 'R' or shake mouse to crank dynamo!">
+        <span class="battery-icon">⚡</span>
+        <div class="battery-bar"><div class="battery-fill" id="battery-fill" style="width: 100%;"></div></div>
+        <span class="battery-text" id="battery-text">100%</span>
+        <button class="crank-btn" id="crank-btn" title="Crank Dynamo (Hotkey: R)">CRANK [R]</button>
+      </div>
+    </div>
+
+    <!-- Right Controls: Mini-Games, Journal, Audio & Navigation -->
+    <div class="hud-right">
+      <button class="hud-action-btn arcade-glow-btn" id="arcade-toggle" title="Play Arcade IT Mini-Games">
+        <span class="icon">🕹️</span>
+        <span class="btn-text">ARCADE</span>
+      </button>
+
+      <button class="hud-action-btn" id="journal-toggle" title="Open Expedition Journal (Press J)">
+        <span class="icon">📜</span>
+        <span class="btn-text">JOURNAL (<span id="relic-counter">0/5</span>)</span>
+      </button>
+
+      <button class="hud-action-btn" id="audio-toggle" title="Toggle Atmospheric Audio (Press M)">
+        <span class="icon" id="audio-icon">🔇</span>
+        <span class="btn-text">AUDIO</span>
+      </button>
+
+      <div class="hud-nav-dropdown">
+        <a href="desktop.html" class="hud-link-btn" style="border-color: #34d399; color: #34d399;" title="Go to Virtual Desktop">🖥️ DESKTOP</a>
+        <a href="mystery.html" class="hud-link-btn" title="Go to Classified Dossier">📁 DOSSIER</a>
+        <a href="index.html" class="hud-link-btn" title="Back to Portfolio">☀️ PORTFOLIO</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Adventure Realm -->
+  <main class="adventure-world" id="adventure-world">
+    
+    <!-- Ambient World Elements: Guiding Arrows & Ancient Carvings in the dark -->
+    <div class="ambient-layer">
+      <!-- Guiding Chalk Arrows hidden in the dark -->
+      <div class="chalk-arrow pos-arrow-1">
+        <svg viewBox="0 0 100 40" class="chalk-svg">
+          <path d="M10,20 Q40,5 70,20 T95,20 M75,8 L95,20 L75,32" stroke="currentColor" fill="none" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span class="chalk-note">TO THE CORE ➔</span>
+      </div>
+
+      <div class="chalk-arrow pos-arrow-2 spectral-only">
+        <svg viewBox="0 0 100 40" class="chalk-svg">
+          <path d="M90,20 Q60,35 30,20 T5,20 M25,8 L5,20 L25,32" stroke="currentColor" fill="none" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span class="chalk-note">⟵ [UV TRACE] RUNE OF ARCHON</span>
+      </div>
+
+      <div class="chalk-arrow pos-arrow-3">
+        <svg viewBox="0 0 60 80" class="chalk-svg">
+          <path d="M30,10 L30,70 M15,50 L30,70 L45,50" stroke="currentColor" fill="none" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span class="chalk-note">DEEPER ▼</span>
+      </div>
+
+      <div class="ancient-graffiti spectral-only pos-graffiti-1">
+        "HE WHO DECODES THE SILICON SHALL CLAIM THE KEY"
+      </div>
+
+      <div class="ancient-graffiti pos-graffiti-2">
+        "Mayer walked here. Year 2026. The archives remain sealed."
+      </div>
+    </div>
+
+    <!-- CHAMBER 1: The Forgotten Vestibule -->
+    <section class="chamber-section active-chamber" id="chamber-1" data-chamber-name="CHAMBER I: THE FORGOTTEN VESTIBULE">
+      
+      <!-- Chamber Intro Inscription -->
+      <div class="monolith-inscription">
+        <h2 class="ancient-title">THE EXPEDITION OF MAYER</h2>
+        <p class="ancient-subtitle">Move your light across the ancient stone. 5 Lost Relics of Systems Mastery lie buried in the darkness.</p>
+        <p class="ancient-prompt">⟨ Sweep the flashlight to sweep cobwebs, discover relics, light torches, and recharge with [R] ⟩</p>
+      </div>
+
+      <!-- Sconces that ignite when flashlight lingers over them -->
+      <div class="wall-sconce sconce-1" data-sconce-id="1">
+        <div class="sconce-torch">🔥</div>
+        <div class="sconce-glow"></div>
+        <span class="sconce-label">IGNITE SCONCE</span>
+      </div>
+
+      <div class="wall-sconce sconce-2" data-sconce-id="2">
+        <div class="sconce-torch">🔥</div>
+        <div class="sconce-glow"></div>
+        <span class="sconce-label">IGNITE SCONCE</span>
+      </div>
+
+      <!-- Relic 1: The Optane Core Fragment -->
+      <div class="relic-item pos-relic-1" data-relic="1" id="relic-1">
+        <div class="relic-halo"></div>
+        <div class="relic-icon-wrapper">
+          <div class="relic-icon">💎</div>
+          <div class="relic-sparkles">✨</div>
+        </div>
+        <div class="relic-label-plate">
+          <span class="relic-name">RELIC I: OPTANE SILICON CORE</span>
+          <span class="relic-prompt">CLICK TO EXAMINE</span>
+        </div>
+      </div>
+
+      <!-- Mini-Game Direct Portal in Chamber 1 -->
+      <div class="minigame-portal" onclick="window.playOptaneGame()">
+        <div class="portal-icon">💾</div>
+        <div class="portal-title">PLAY MINI-GAME: OPTANE SECTOR DEFRAG</div>
+        <span class="portal-sub">Test your speed repairing corrupted storage (+75 XP)</span>
+      </div>
+
+      <!-- Mysterious Ancient Chest -->
+      <div class="ancient-chest pos-chest-1" id="chest-1">
+        <div class="chest-box">📦</div>
+        <div class="chest-halo"></div>
+        <div class="chest-label">CHEST OF RECOVERY // CLICK TO OPEN</div>
+      </div>
+
+      <!-- Chamber Navigation Portal -->
+      <div class="chamber-gateway gateway-down" data-target="chamber-2">
+        <div class="gateway-runes">⚡ DESCEND TO CHAMBER II: ARCHIVE OF ROUTES ⚡</div>
+        <div class="gateway-beam"></div>
+      </div>
+    </section>
+
+    <!-- CHAMBER 2: The Archive of Routes (Networking & Systems) -->
+    <section class="chamber-section" id="chamber-2" data-chamber-name="CHAMBER II: ARCHIVE OF ROUTES">
+      <div class="chamber-header-lore">
+        <span class="lore-tag">SUBNET LABYRINTH</span>
+        <h2>THE HALL OF FIBER AND BRIDGES</h2>
+        <p>Ancient conduits pulse with forgotten data packets. Route your light to uncover the network secrets.</p>
+      </div>
+
+      <!-- Sconces for Chamber 2 -->
+      <div class="wall-sconce sconce-3" data-sconce-id="3">
+        <div class="sconce-torch">🔥</div>
+        <div class="sconce-glow"></div>
+        <span class="sconce-label">IGNITE SCONCE</span>
+      </div>
+
+      <!-- Relic 2: The Prism of Subnets -->
+      <div class="relic-item pos-relic-2" data-relic="2" id="relic-2">
+        <div class="relic-halo"></div>
+        <div class="relic-icon-wrapper">
+          <div class="relic-icon">🌐</div>
+          <div class="relic-sparkles">✨</div>
+        </div>
+        <div class="relic-label-plate">
+          <span class="relic-name">RELIC II: PRISM OF INFINITE ROUTES</span>
+          <span class="relic-prompt">CLICK TO EXAMINE</span>
+        </div>
+      </div>
+
+      <!-- Relic 3: The Script Codex -->
+      <div class="relic-item pos-relic-3" data-relic="3" id="relic-3">
+        <div class="relic-halo"></div>
+        <div class="relic-icon-wrapper">
+          <div class="relic-icon">📜</div>
+          <div class="relic-sparkles">✨</div>
+        </div>
+        <div class="relic-label-plate">
+          <span class="relic-name">RELIC III: CODEX OF TERMINAL SCRIPTS</span>
+          <span class="relic-prompt">CLICK TO EXAMINE</span>
+        </div>
+      </div>
+
+      <!-- Mini-Game Direct Portal in Chamber 2 -->
+      <div class="minigame-portal" onclick="window.playSubnetGame()">
+        <div class="portal-icon">🌐</div>
+        <div class="portal-title">PLAY MINI-GAME: SUBNET ROUTE MASTER</div>
+        <span class="portal-sub">Rotate network conduits to connect Taifa to Valley View (+75 XP)</span>
+      </div>
+
+      <!-- Spectral Hidden Rune (Only visible in UV mode) -->
+      <div class="uv-rune-sigil spectral-only pos-sigil-1" id="rune-sigil-1">
+        <div class="sigil-glow">🔮</div>
+        <div class="sigil-text">
+          <strong>CIPHER OF MONTEREY:</strong><br/>
+          <code>"diskutil zeroDisk /dev/disk0 &amp;&amp; nvram -c"</code>
+        </div>
+      </div>
+
+      <!-- Chamber Navigation Portals -->
+      <div class="chamber-nav-row">
+        <button class="chamber-nav-btn gateway-back" data-target="chamber-1">
+          <span>▲ ASCEND TO VESTIBULE</span>
+        </button>
+        <button class="chamber-nav-btn gateway-next" data-target="chamber-3">
+          <span>▼ ENTER CHAMBER III: THE INNER SANCTUM</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- CHAMBER 3: The Inner Sanctum & Vault Door -->
+    <section class="chamber-section" id="chamber-3" data-chamber-name="CHAMBER III: THE INNER SANCTUM">
+      <div class="chamber-header-lore">
+        <span class="lore-tag">FORBIDDEN CORE</span>
+        <h2>THE VAULT OF THE ARCHON</h2>
+        <p>The grand vault door is sealed by 5 relic sockets. Place all relics into the central altar to open the vault.</p>
+      </div>
+
+      <!-- Relic 4: The PS3 Silicon Key -->
+      <div class="relic-item pos-relic-4" data-relic="4" id="relic-4">
+        <div class="relic-halo"></div>
+        <div class="relic-icon-wrapper">
+          <div class="relic-icon">🎮</div>
+          <div class="relic-sparkles">✨</div>
+        </div>
+        <div class="relic-label-plate">
+          <span class="relic-name">RELIC IV: CFW SILICON MATRIX</span>
+          <span class="relic-prompt">CLICK TO EXAMINE</span>
+        </div>
+      </div>
+
+      <!-- Relic 5: The Shield of Taifa -->
+      <div class="relic-item pos-relic-5 spectral-only" data-relic="5" id="relic-5">
+        <div class="relic-halo"></div>
+        <div class="relic-icon-wrapper">
+          <div class="relic-icon">🛡️</div>
+          <div class="relic-sparkles">✨</div>
+        </div>
+        <div class="relic-label-plate">
+          <span class="relic-name">RELIC V: SPECTRAL AEGIS OF TAIFA</span>
+          <span class="relic-prompt">CLICK TO CLAIM (UV FOUND)</span>
+        </div>
+      </div>
+
+      <!-- The Grand Central Vault Altar / Door -->
+      <div class="vault-monolith" id="vault-altar">
+        <div class="altar-arch">
+          <div class="arch-runes">⚡ VAULT 81801 // KWAME AFRIYIE AMPOMAH ⚡</div>
+          
+          <div class="altar-sockets">
+            <div class="socket" id="socket-1" title="Socket I: Optane Core"><span>💎</span></div>
+            <div class="socket" id="socket-2" title="Socket II: Subnet Prism"><span>🌐</span></div>
+            <div class="socket" id="socket-3" title="Socket III: Terminal Codex"><span>📜</span></div>
+            <div class="socket" id="socket-4" title="Socket IV: Silicon Matrix"><span>🎮</span></div>
+            <div class="socket" id="socket-5" title="Socket V: Spectral Aegis"><span>🛡️</span></div>
+          </div>
+
+          <button class="unlock-vault-btn" id="unlock-vault-btn" disabled>
+            <span class="btn-glow"></span>
+            <span class="btn-title">VAULT SEALED (0/5 RELICS FOUND)</span>
+            <span class="btn-sub">Collect all relics across the chambers to break the seal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Return navigation -->
+      <div class="chamber-nav-row">
+        <button class="chamber-nav-btn gateway-back" data-target="chamber-2">
+          <span>▲ ASCEND TO ROUTE ARCHIVES</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Relic Inspector Modal -->
+  <div class="modal-backdrop" id="relic-modal">
+    <div class="relic-inspect-card">
+      <button class="modal-close-btn" id="relic-modal-close">✕</button>
+      <div class="inspect-glow" id="inspect-glow"></div>
+      
+      <div class="inspect-icon-large" id="inspect-icon">💎</div>
+      <div class="inspect-category" id="inspect-cat">SYSTEMS ARTIFACT #01</div>
+      <h3 class="inspect-title" id="inspect-title">RELIC NAME</h3>
+      
+      <div class="inspect-divider"></div>
+      
+      <div class="inspect-description" id="inspect-desc">
+        Artifact lore and technical description will be rendered here.
+      </div>
+
+      <div class="inspect-technical-box" id="inspect-tech">
+        <strong>FIELD RECOVERY NOTE:</strong>
+        <p id="inspect-note">Recovered during storage partition desynchronization incident.</p>
+      </div>
+
+      <button class="claim-relic-btn" id="claim-relic-btn">
+        <span class="btn-sparkle">✨</span>
+        <span class="claim-text">SECURE RELIC IN JOURNAL</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chest Opened Modal -->
+  <div class="modal-backdrop" id="chest-modal">
+    <div class="relic-inspect-card">
+      <button class="modal-close-btn" id="chest-modal-close">✕</button>
+      <div class="inspect-glow chest-gold"></div>
+      
+      <div class="inspect-icon-large">🗝️</div>
+      <div class="inspect-category">ANCIENT STASH UNLOCKED</div>
+      <h3 class="inspect-title">THE EXPLORER'S MEMOIR</h3>
+      
+      <div class="inspect-divider"></div>
+      
+      <div class="inspect-description">
+        "To those traversing the dark: true mastery over machines is not knowing all answers, but having the light to diagnose any system under pressure."
+      </div>
+
+      <div class="inspect-technical-box">
+        <strong>FOUND INSIDE:</strong>
+        <p>A Ventoy Multiboot Key &amp; Hardware Diagnostics Toolkit used in Kwame's major campus recovery ops.</p>
+      </div>
+
+      <button class="claim-relic-btn" id="chest-claim-btn">
+        <span class="btn-sparkle">✨</span>
+        <span class="claim-text">STORE IN ADVENTURE LOG</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Expedition Journal Modal -->
+  <div class="modal-backdrop" id="journal-modal">
+    <div class="journal-parchment">
+      <div class="journal-header">
+        <div class="journal-title-box">
+          <span class="journal-seal">🏛️</span>
+          <div>
+            <h2>EXPEDITION FIELD JOURNAL</h2>
+            <span class="journal-sub">Explorer: Kwame Afriyie Ampomah (Mayer) // Sector: Taifa [GH]</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="journal-close">✕</button>
+      </div>
+
+      <div class="journal-content-grid">
+        <!-- Left: Relic Checklist -->
+        <div class="journal-left">
+          <h3>DISCOVERED RELICS (<span id="journal-count">0</span>/5)</h3>
+          
+          <div class="journal-relic-list">
+            <div class="journal-entry" id="j-entry-1">
+              <div class="entry-status">❌</div>
+              <div class="entry-info">
+                <strong>I. Optane Silicon Core</strong>
+                <p>Chamber I. Storage &amp; BIOS recovery mastery.</p>
+              </div>
+            </div>
+
+            <div class="journal-entry" id="j-entry-2">
+              <div class="entry-status">❌</div>
+              <div class="entry-info">
+                <strong>II. Prism of Infinite Routes</strong>
+                <p>Chamber II. Subnet &amp; gateway architecture.</p>
+              </div>
+            </div>
+
+            <div class="journal-entry" id="j-entry-3">
+              <div class="entry-status">❌</div>
+              <div class="entry-info">
+                <strong>III. Codex of Terminal Scripts</strong>
+                <p>Chamber II. Automation &amp; recovery scripts.</p>
+              </div>
+            </div>
+
+            <div class="journal-entry" id="j-entry-4">
+              <div class="entry-status">❌</div>
+              <div class="entry-info">
+                <strong>IV. CFW Silicon Matrix</strong>
+                <p>Chamber III. Custom firmware &amp; embedded systems.</p>
+              </div>
+            </div>
+
+            <div class="journal-entry" id="j-entry-5">
+              <div class="entry-status">❌</div>
+              <div class="entry-info">
+                <strong>V. Spectral Aegis of Taifa</strong>
+                <p>Chamber III. Requires UV Spectral Lens to reveal.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Explorer Notes & Clues -->
+        <div class="journal-right">
+          <h3>EXPEDITION CIPHERS &amp; HINTS</h3>
+          <div class="journal-clue-box">
+            <p><strong>💡 Torch Tip:</strong> Sweep slowly across the wall carvings. Dust motes reveal where secrets lie dormant.</p>
+            <p><strong>⚡ Dynamo Crank:</strong> When battery drops, tap <kbd>R</kbd> or shake your mouse to reignite the torch.</p>
+            <p><strong>👁️ UV Spectral Lens:</strong> Press <kbd>2</kbd> to reveal invisible runic ink.</p>
+            <p><strong>🕹️ Arcade Mini-Games:</strong> Play the Optane and Subnet puzzles for bonus XP!</p>
+          </div>
+
+          <div class="quick-links-box">
+            <h4>DIRECT REPOSITORIES</h4>
+            <ul>
+              <li><a href="https://github.com/Kwame-Afriyie-Ampomah" target="_blank" rel="noopener">GitHub: @Kwame-Afriyie-Ampomah</a></li>
+              <li><a href="https://linkedin.com/in/kwame-afriyie-ampomah" target="_blank" rel="noopener">LinkedIn: Kwame Afriyie Ampomah</a></li>
+              <li><span>Station: Taifa, Greater Accra, Ghana</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ultimate Vault Opening Modal / Victory Screen -->
+  <div class="modal-backdrop" id="victory-modal">
+    <div class="victory-sanctum-card">
+      <div class="victory-rays"></div>
+      <div class="victory-header">
+        <span class="victory-badge">⚡ VAULT BREACHED // ALL SEALS DISSOLVED ⚡</span>
+        <h1>THE ARCHIVES OF KWAME AFRIYIE AMPOMAH</h1>
+        <p class="victory-alias">KNOWN ALIAS: <strong>MAYER</strong> // SYSTEM ARCHITECT &amp; FORENSICS EXPERT</p>
+      </div>
+
+      <div class="victory-body">
+        <div class="victory-lore">
+          <p>
+            You navigated the darkness, followed the ancient chalk arrows, decoded the spectral ciphers, and retrieved all 5 Relics of Mastery.
+          </p>
+        </div>
+
+        <div class="victory-stats-grid">
+          <div class="v-stat">
+            <span class="v-num">B.Ed IT</span>
+            <span class="v-lab">Valley View University</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-num">INFRA</span>
+            <span class="v-lab">Maxim Nyansa Trainee</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-num">TAIFA</span>
+            <span class="v-lab">Base Operations [GH]</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-num">CFW / GPT</span>
+            <span class="v-lab">Forensics Specialist</span>
+          </div>
+        </div>
+
+        <div class="victory-actions">
+          <a href="index.html" class="v-btn primary-glow">🌟 VIEW FULL WEB PORTFOLIO</a>
+          <a href="mystery.html" class="v-btn secondary-btn">📁 CLASSIFIED DOSSIER ARCHIVE</a>
+          <button class="v-btn close-v-btn" id="victory-close">EXPLORE RUINS FREELY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="fun-engine.js"></script>
+  <script src="minigames.js"></script>
+  <script src="adventure.js"></script>
+</body>
+</html>
